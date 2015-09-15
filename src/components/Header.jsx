@@ -1,6 +1,8 @@
 let React = require("react");
 let moment = require("moment");
 
+let ProgressBar = require("./ProgressBar.jsx");
+
 let Fluxxor = require("fluxxor");
 let FluxMixin = Fluxxor.FluxMixin(React);
 
@@ -19,6 +21,9 @@ let Header = React.createClass({
     this.getFlux().actions.loadHistory(q, this.props.selectedDay);
   },
   render: function () {
+    let headerStyle = {
+      position: "fixed"
+    };
     let formattedTitle = "";
     if (this.props.query !== "") {
       formattedTitle += "Searching: \"" + this.props.query + "\"";
@@ -28,7 +33,7 @@ let Header = React.createClass({
     }
     formattedTitle += moment(this.props.selectedDay).format("dddd, MMM Do YY'");
     return (
-      <header className="mdl-layout__header">
+      <header className="mdl-layout__header" style={headerStyle}>
         <div className="mdl-layout__header-row">
           <span className="mdl-layout-title">{formattedTitle}</span>
           <div className="mdl-layout-spacer"></div>
@@ -49,6 +54,7 @@ let Header = React.createClass({
             </div>
           </div>
         </div>
+        {this.props.loading ? <ProgressBar /> : null}
       </header>
     );
   }

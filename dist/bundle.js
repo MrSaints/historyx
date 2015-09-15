@@ -20445,7 +20445,6 @@
 	
 	var Header = __webpack_require__(158);
 	var Drawer = __webpack_require__(344);
-	var ProgressBar = __webpack_require__(347);
 	var HistoryTable = __webpack_require__(348);
 	
 	var Fluxxor = __webpack_require__(247);
@@ -20464,15 +20463,17 @@
 	    this.getFlux().actions.loadHistory();
 	  },
 	  render: function render() {
+	    var contentStyle = {
+	      marginTop: "64px"
+	    };
 	    return React.createElement(
 	      "div",
 	      { className: "mdl-layout mdl-layout--fixed-drawer mdl-layout--fixed-header" },
-	      React.createElement(Header, { query: this.state.query, selectedDay: this.state.date }),
+	      React.createElement(Header, { query: this.state.query, selectedDay: this.state.date, loading: this.state.loading }),
 	      React.createElement(Drawer, { query: this.state.query, selectedDay: this.state.date }),
 	      React.createElement(
 	        "main",
-	        { className: "mdl-layout__content" },
-	        this.state.loading ? React.createElement(ProgressBar, null) : null,
+	        { className: "mdl-layout__content", style: contentStyle },
 	        React.createElement(HistoryTable, { selectedDay: this.state.date, pages: this.state.pages })
 	      )
 	    );
@@ -20489,6 +20490,8 @@
 	
 	var React = __webpack_require__(1);
 	var moment = __webpack_require__(159);
+	
+	var ProgressBar = __webpack_require__(347);
 	
 	var Fluxxor = __webpack_require__(247);
 	var FluxMixin = Fluxxor.FluxMixin(React);
@@ -20510,6 +20513,9 @@
 	    this.getFlux().actions.loadHistory(q, this.props.selectedDay);
 	  },
 	  render: function render() {
+	    var headerStyle = {
+	      position: "fixed"
+	    };
 	    var formattedTitle = "";
 	    if (this.props.query !== "") {
 	      formattedTitle += "Searching: \"" + this.props.query + "\"";
@@ -20520,7 +20526,7 @@
 	    formattedTitle += moment(this.props.selectedDay).format("dddd, MMM Do YY'");
 	    return React.createElement(
 	      "header",
-	      { className: "mdl-layout__header" },
+	      { className: "mdl-layout__header", style: headerStyle },
 	      React.createElement(
 	        "div",
 	        { className: "mdl-layout__header-row" },
@@ -20558,7 +20564,8 @@
 	            )
 	          )
 	        )
-	      )
+	      ),
+	      this.props.loading ? React.createElement(ProgressBar, null) : null
 	    );
 	  }
 	});
