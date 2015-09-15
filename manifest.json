@@ -1,0 +1,13 @@
+{
+    "manifest_version": 2,
+    "name": "Delorean",
+    "description": "A Chrome extension to enhance your browsing history experience.",
+    "version": "1.0",
+    "chrome_url_overrides" : {
+      "history": "index.html"
+    },
+    "permissions": [
+        "history",
+        "chrome://favicon/"
+    ]
+}
