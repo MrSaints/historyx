@@ -12,6 +12,7 @@ let methods = {
     this.dispatch(constants.LOAD_HISTORY);
     let params = {
       text: q
+      //, maxResults: 0
     };
     if (d) {
       params["startTime"] = moment(d).startOf("day").valueOf();
