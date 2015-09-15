@@ -20465,8 +20465,8 @@
 	    return React.createElement(
 	      "div",
 	      { className: "mdl-layout mdl-layout--fixed-drawer mdl-layout--fixed-header" },
-	      React.createElement(Header, null),
-	      React.createElement(Drawer, null),
+	      React.createElement(Header, { selectedDay: this.state.date }),
+	      React.createElement(Drawer, { selectedDay: this.state.date }),
 	      React.createElement(
 	        "main",
 	        { className: "mdl-layout__content" },
@@ -20485,11 +20485,13 @@
 	"use strict";
 	
 	var React = __webpack_require__(1);
+	var moment = __webpack_require__(165);
 	
 	var Header = React.createClass({
 	  displayName: "Header",
 	
 	  render: function render() {
+	    var formattedDate = moment(this.props.selectedDay).format("dddd, MMM Do YY'");
 	    return React.createElement(
 	      "header",
 	      { className: "mdl-layout__header" },
@@ -20499,7 +20501,7 @@
 	        React.createElement(
 	          "span",
 	          { className: "mdl-layout-title" },
-	          "Recent History"
+	          formattedDate
 	        ),
 	        React.createElement("div", { className: "mdl-layout-spacer" }),
 	        React.createElement(
@@ -20535,38 +20537,33 @@
 	
 	var React = __webpack_require__(1);
 	
+	var Fluxxor = __webpack_require__(253);
+	var FluxMixin = Fluxxor.FluxMixin(React);
+	
+	var moment = __webpack_require__(165);
 	var DayPicker = __webpack_require__(160);
-	
-	var _require = __webpack_require__(161);
-	
-	var isSameDay = _require.isSameDay;
 	
 	var Drawer = React.createClass({
 	  displayName: "Drawer",
 	
-	  getInitialState: function getInitialState() {
-	    return {
-	      selectedDay: new Date()
-	    };
-	  },
+	  mixins: [FluxMixin],
 	  handleDayClick: function handleDayClick(e, day) {
 	    var currentDate = new Date();
 	    if (day > currentDate) {
 	      return false;
 	    }
-	    this.setState({
-	      selectedDay: day
-	    });
+	    this.getFlux().actions.changeDate(day);
+	    this.getFlux().actions.loadHistory("", day);
 	  },
 	  render: function render() {
-	    var selectedDay = this.state.selectedDay;
+	    var _this = this;
 	
 	    var drawerStyle = {
 	      position: "fixed"
 	    };
 	    var modifiers = {
 	      "selected": function selected(day) {
-	        return isSameDay(selectedDay, day);
+	        return moment(_this.props.selectedDay).isSame(day);
 	      }
 	    };
 	
@@ -21356,7 +21353,7 @@
 	"use strict";
 	
 	var React = __webpack_require__(1);
-	var Moment = __webpack_require__(165);
+	var moment = __webpack_require__(165);
 	
 	var HistoryItem = React.createClass({
 	  displayName: "HistoryItem",
@@ -21370,8 +21367,7 @@
 	      return newString;
 	    },
 	    getTime: function getTime(t) {
-	      var d = new Date(t);
-	      return Moment(d).format("HH:mm:ss");
+	      return moment(t).format("HH:mm:ss");
 	    }
 	  },
 	  render: function render() {
@@ -37357,23 +37353,36 @@
 
 /***/ },
 /* 350 */
-/***/ function(module, exports) {
+/***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
 	
+	var moment = __webpack_require__(165);
+	
 	var constants = {
+	  "CHANGE_DATE": "CHANGE_DATE",
 	  "LOAD_HISTORY": "LOAD_HISTORY",
 	  "LOAD_HISTORY_COMPLETE": "LOAD_HISTORY_COMPLETE"
 	};
 	
 	var methods = {
 	  loadHistory: function loadHistory() {
-	    this.dispatch(constants.LOAD_HISTORY);
+	    var q = arguments.length <= 0 || arguments[0] === undefined ? "" : arguments[0];
+	    var d = arguments.length <= 1 || arguments[1] === undefined ? new Date() : arguments[1];
 	
-	    chrome.history.search({ text: "" }, (function (pages) {
-	      console.table(pages);
+	    this.dispatch(constants.LOAD_HISTORY);
+	    var params = {
+	      text: q,
+	      startTime: moment(d).startOf("day").valueOf(),
+	      endTime: moment(d).endOf("day").valueOf()
+	    };
+	    chrome.history.search(params, (function (pages) {
+	      //console.table(pages);
 	      this.dispatch(constants.LOAD_HISTORY_COMPLETE, { pages: pages });
 	    }).bind(this));
+	  },
+	  changeDate: function changeDate(newDate) {
+	    this.dispatch(constants.CHANGE_DATE, { date: newDate });
 	  }
 	};
 	
@@ -37394,9 +37403,14 @@
 	var HistoryStore = Fluxxor.createStore({
 	  initialize: function initialize() {
 	    this.loading = false;
+	    this.date = new Date();
 	    this.pages = [];
 	
-	    this.bindActions(actions.constants.LOAD_HISTORY, this.onLoadHistory, actions.constants.LOAD_HISTORY_COMPLETE, this.onLoadHistoryComplete);
+	    this.bindActions(actions.constants.CHANGE_DATE, this.onChangeDate, actions.constants.LOAD_HISTORY, this.onLoadHistory, actions.constants.LOAD_HISTORY_COMPLETE, this.onLoadHistoryComplete);
+	  },
+	  onChangeDate: function onChangeDate(payload) {
+	    this.date = payload.date;
+	    this.emit("change");
 	  },
 	  onLoadHistory: function onLoadHistory() {
 	    this.loading = true;
@@ -37410,6 +37424,7 @@
 	  },
 	  getState: function getState() {
 	    return {
+	      date: this.date,
 	      pages: this.pages
 	    };
 	  }

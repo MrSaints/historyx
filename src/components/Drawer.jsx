@@ -1,30 +1,27 @@
 let React = require("react");
 
+let Fluxxor = require("fluxxor");
+let FluxMixin = Fluxxor.FluxMixin(React);
+
+let moment = require("moment");
 let DayPicker = require("react-day-picker");
-let { isSameDay } = require("react-day-picker/lib/Utils");
 
 let Drawer = React.createClass({
-  getInitialState: function () {
-    return {
-      selectedDay: new Date()
-    };
-  },
+  mixins: [FluxMixin],
   handleDayClick: function (e, day) {
     let currentDate = new Date();
     if (day > currentDate) {
       return false;
     }
-    this.setState({
-      selectedDay: day
-    });
+    this.getFlux().actions.changeDate(day);
+    this.getFlux().actions.loadHistory("", day);
   },
   render: function () {
-    let { selectedDay } = this.state;
     let drawerStyle = {
       position: "fixed"
     };
     let modifiers = {
-      "selected": (day) => isSameDay(selectedDay, day)
+      "selected": (day) => moment(this.props.selectedDay).isSame(day)
     };
 
     return (

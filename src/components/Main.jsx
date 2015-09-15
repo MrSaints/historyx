@@ -19,8 +19,8 @@ let Main = React.createClass({
     render: function () {
       return (
         <div className="mdl-layout mdl-layout--fixed-drawer mdl-layout--fixed-header">
-          <Header />
-          <Drawer />
+          <Header selectedDay={this.state.date} />
+          <Drawer selectedDay={this.state.date} />
           <main className="mdl-layout__content">
             <HistoryTable pages={this.state.pages} />
           </main>

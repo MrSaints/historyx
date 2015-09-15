@@ -1,5 +1,5 @@
 let React = require("react");
-let Moment = require("moment");
+let moment = require("moment");
 
 let HistoryItem = React.createClass({
   statics: {
@@ -11,8 +11,7 @@ let HistoryItem = React.createClass({
       return newString
     },
     getTime: function (t) {
-      let d = new Date(t);
-      return Moment(d).format("HH:mm:ss");
+      return moment(t).format("HH:mm:ss");
     }
   },
   render: function () {
