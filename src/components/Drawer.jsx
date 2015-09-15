@@ -26,7 +26,7 @@ let Drawer = React.createClass({
 
     return (
       <div className="mdl-layout__drawer" style={drawerStyle}>
-        <span className="mdl-layout-title">Delorean</span>
+        <span className="mdl-layout-title">DeLorean</span>
         <div>
           <DayPicker
             modifiers={modifiers}

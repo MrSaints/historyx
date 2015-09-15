@@ -1,4 +1,4 @@
-# Delorean
+# DeLorean
 
 _A work in progress._
 
