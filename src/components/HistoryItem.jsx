@@ -27,6 +27,9 @@ let HistoryItem = React.createClass({
             {this._truncate(this.props.title || this.props.url)}
           </a>
         </td>
+        <td>
+          &nbsp;
+        </td>
       </tr>
     );
   }
