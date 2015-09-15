@@ -1,6 +1,8 @@
 let React = require("react");
+
 let Header = require("./Header.jsx");
 let Drawer = require("./Drawer.jsx");
+let ProgressBar = require("./ProgressBar.jsx");
 let HistoryTable = require("./HistoryTable.jsx");
 
 let Fluxxor = require("fluxxor");
@@ -19,9 +21,10 @@ let Main = React.createClass({
     render: function () {
       return (
         <div className="mdl-layout mdl-layout--fixed-drawer mdl-layout--fixed-header">
-          <Header selectedDay={this.state.date} />
-          <Drawer selectedDay={this.state.date} />
+          <Header query={this.state.query} selectedDay={this.state.date} />
+          <Drawer query={this.state.query} selectedDay={this.state.date} />
           <main className="mdl-layout__content">
+            {this.state.loading ? <ProgressBar /> : null}
             <HistoryTable pages={this.state.pages} />
           </main>
         </div>

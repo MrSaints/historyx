@@ -14,14 +14,14 @@ let Drawer = React.createClass({
       return false;
     }
     this.getFlux().actions.changeDate(day);
-    this.getFlux().actions.loadHistory("", day);
+    this.getFlux().actions.loadHistory(this.props.query, day);
   },
   render: function () {
     let drawerStyle = {
       position: "fixed"
     };
     let modifiers = {
-      "selected": (day) => moment(this.props.selectedDay).isSame(day)
+      "selected": (day) => moment(this.props.selectedDay).isSame(day, "day")
     };
 
     return (
@@ -29,8 +29,8 @@ let Drawer = React.createClass({
         <span className="mdl-layout-title">Delorean</span>
         <div>
           <DayPicker
-            modifiers={ modifiers }
-            onDayClick={ this.handleDayClick } />
+            modifiers={modifiers}
+            onDayClick={this.handleDayClick} />
         </div>
         <nav className="mdl-navigation">
           <a className="mdl-navigation__link" href="#">About</a>
