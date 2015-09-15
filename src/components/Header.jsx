@@ -38,7 +38,7 @@ let Header = React.createClass({
           <span className="mdl-layout-title">{formattedTitle}</span>
           <div className="mdl-layout-spacer"></div>
           <div className="mdl-textfield mdl-js-textfield mdl-textfield--expandable mdl-textfield--floating-label mdl-textfield--align-right">
-            <label className="mdl-button mdl-js-button mdl-button--icon" htmlFor="search">
+            <label className="mdl-button mdl-button--icon" htmlFor="search">
               <i className="material-icons">search</i>
             </label>
             <div className="mdl-textfield__expandable-holder">
