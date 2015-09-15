@@ -5,7 +5,7 @@ let HistoryHead = React.createClass({
     return (
       <thead>
         <tr>
-          <th className="mdl-data-table__cell--non-numeric">Visited</th>
+          <th className="mdl-data-table__cell--non-numeric">Last Visited</th>
           <th className="mdl-data-table__cell--non-numeric" colSpan="2">Page</th>
         </tr>
       </thead>

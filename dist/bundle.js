@@ -20512,7 +20512,10 @@
 	  render: function render() {
 	    var formattedTitle = "";
 	    if (this.props.query !== "") {
-	      formattedTitle = "Searching: '" + this.props.query + "' on ";
+	      formattedTitle += "Searching: \"" + this.props.query + "\"";
+	      if (this.props.selectedDay) {
+	        formattedTitle += " on ";
+	      }
 	    }
 	    formattedTitle += moment(this.props.selectedDay).format("dddd, MMM Do YY'");
 	    return React.createElement(
@@ -37362,7 +37365,7 @@
 	        React.createElement(
 	          "th",
 	          { className: "mdl-data-table__cell--non-numeric" },
-	          "Visited"
+	          "Last Visited"
 	        ),
 	        React.createElement(
 	          "th",
@@ -37388,31 +37391,29 @@
 	var HistoryItem = React.createClass({
 	  displayName: "HistoryItem",
 	
-	  statics: {
-	    truncate: function truncate(s) {
-	      var newString = s.substr(0, 100);
-	      if (s.length > 100) {
-	        newString += "...";
-	      }
-	      return newString;
-	    },
-	    getTime: function getTime(t) {
-	      return moment(t).format("hh:mm:ss A");
+	  _truncate: function _truncate(s) {
+	    var newString = s.substr(0, 100);
+	    if (s.length > 100) {
+	      newString += "...";
 	    }
+	    return newString;
 	  },
 	  render: function render() {
-	    var formattedTime = this.constructor.getTime(this.props.visited);
+	    var formattedTime = moment(this.props.visited).format("hh:mm:ss A");
+	    if (this.props.stale) {
+	      formattedTime = React.createElement(
+	        "em",
+	        null,
+	        moment(this.props.visited).format("hh:mm A DD-MM-YYYY")
+	      );
+	    }
 	    return React.createElement(
 	      "tr",
 	      null,
 	      React.createElement(
 	        "td",
 	        { className: "mdl-data-table__cell--non-numeric" },
-	        this.props.stale ? React.createElement(
-	          "em",
-	          null,
-	          formattedTime
-	        ) : formattedTime
+	        formattedTime
 	      ),
 	      React.createElement(
 	        "td",
@@ -37429,7 +37430,7 @@
 	            target: "_blank",
 	            className: "mdl-badge",
 	            "data-badge": this.props.count },
-	          this.constructor.truncate(this.props.title || this.props.url)
+	          this._truncate(this.props.title || this.props.url)
 	        )
 	      )
 	    );
