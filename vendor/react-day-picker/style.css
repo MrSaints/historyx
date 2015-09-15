@@ -34,12 +34,12 @@
 
 .DayPicker-NavButton--prev {
   left: 1rem;
-  background-image: url("/img/prev.svg");
+  background-image: url("./prev.svg");
 }
 
 .DayPicker-NavButton--next {
   right: 1rem;
-  background-image: url("/img/next.svg");
+  background-image: url("./next.svg");
 }
 
 .DayPicker-Caption {
