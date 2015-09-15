@@ -21,7 +21,10 @@ let Header = React.createClass({
   render: function () {
     let formattedTitle = "";
     if (this.props.query !== "") {
-      formattedTitle = "Searching: '" + this.props.query + "' on ";
+      formattedTitle += "Searching: \"" + this.props.query + "\"";
+      if (this.props.selectedDay) {
+        formattedTitle += " on ";
+      }
     }
     formattedTitle += moment(this.props.selectedDay).format("dddd, MMM Do YY'");
     return (
