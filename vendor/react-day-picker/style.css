@@ -85,7 +85,7 @@
 }
 
 .DayPicker-Day--today {
-  color: #D0021B;
+  color: #ff4081;
   font-weight: 500;
 }
 
@@ -107,7 +107,7 @@
 
 .DayPicker-Day--selected:not(.DayPicker-Day--disabled):not(.DayPicker-Day--outside) {
   color: #FFF;
-  background-color: #4A90E2;
+  background-color: #3f51b5;
 }
 
 .DayPicker--ar {
