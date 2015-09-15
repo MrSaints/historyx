@@ -11,7 +11,7 @@ let HistoryItem = React.createClass({
       return newString
     },
     getTime: function (t) {
-      return moment(t).format("HH:mm:ss");
+      return moment(t).format("hh:mm:ss A");
     }
   },
   render: function () {
@@ -20,7 +20,13 @@ let HistoryItem = React.createClass({
         <td className="mdl-data-table__cell--non-numeric">{this.constructor.getTime(this.props.visited)}</td>
         <td className="mdl-data-table__cell--non-numeric"><img src={"chrome://favicon/" + this.props.url} /></td>
         <td className="mdl-data-table__cell--non-numeric">
-          <a href={this.props.url} target="_blank">{this.constructor.truncate(this.props.title || this.props.url)}</a>
+          <a
+            href={this.props.url}
+            target="_blank"
+            className="mdl-badge"
+            data-badge={this.props.count}>
+            {this.constructor.truncate(this.props.title || this.props.url)}
+          </a>
         </td>
       </tr>
     );
