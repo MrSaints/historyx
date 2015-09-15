@@ -50,8 +50,8 @@
 	var Main = __webpack_require__(157);
 	
 	var Fluxxor = __webpack_require__(247);
-	var actions = __webpack_require__(350);
-	var HistoryStore = __webpack_require__(351);
+	var actions = __webpack_require__(351);
+	var HistoryStore = __webpack_require__(352);
 	var stores = {
 	  HistoryStore: new HistoryStore()
 	};
@@ -20445,8 +20445,8 @@
 	
 	var Header = __webpack_require__(158);
 	var Drawer = __webpack_require__(344);
-	var ProgressBar = __webpack_require__(352);
-	var HistoryTable = __webpack_require__(347);
+	var ProgressBar = __webpack_require__(347);
+	var HistoryTable = __webpack_require__(348);
 	
 	var Fluxxor = __webpack_require__(247);
 	var FluxMixin = Fluxxor.FluxMixin(React),
@@ -20473,7 +20473,7 @@
 	        "main",
 	        { className: "mdl-layout__content" },
 	        this.state.loading ? React.createElement(ProgressBar, null) : null,
-	        React.createElement(HistoryTable, { pages: this.state.pages })
+	        React.createElement(HistoryTable, { selectedDay: this.state.date, pages: this.state.pages })
 	      )
 	    );
 	  }
@@ -37272,13 +37272,52 @@
 	"use strict";
 	
 	var React = __webpack_require__(1);
-	var HistoryHead = __webpack_require__(348);
-	var HistoryItem = __webpack_require__(349);
+	
+	var ProgressBar = React.createClass({
+	    displayName: "ProgressBar",
+	
+	    render: function render() {
+	        var loaderStyle = {
+	            width: "100%"
+	        };
+	        var bar1Style = {
+	            width: "0%"
+	        };
+	        var bar2Style = {
+	            width: "100%"
+	        };
+	        var bar3Style = bar1Style;
+	        return React.createElement(
+	            "div",
+	            {
+	                className: "mdl-progress mdl-progress__indeterminate is-upgraded",
+	                style: loaderStyle },
+	            React.createElement("div", { className: "progressbar bar bar1", style: bar1Style }),
+	            React.createElement("div", { className: "bufferbar bar bar2", style: bar2Style }),
+	            React.createElement("div", { className: "auxbar bar bar3", style: bar3Style })
+	        );
+	    }
+	});
+	
+	module.exports = ProgressBar;
+
+/***/ },
+/* 348 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+	
+	var React = __webpack_require__(1);
+	var moment = __webpack_require__(159);
+	
+	var HistoryHead = __webpack_require__(349);
+	var HistoryItem = __webpack_require__(350);
 	
 	var HistoryTable = React.createClass({
 	  displayName: "HistoryTable",
 	
 	  render: function render() {
+	    var currentEnd = moment(this.props.selectedDay).endOf("day").valueOf();
 	    return React.createElement(
 	      "table",
 	      { className: "mdl-data-table mdl-shadow--2dp", width: "100%" },
@@ -37292,7 +37331,8 @@
 	            title: item.title,
 	            url: item.url,
 	            visited: item.lastVisitTime,
-	            count: item.visitCount });
+	            count: item.visitCount,
+	            stale: item.lastVisitTime > currentEnd ? true : false });
 	        })
 	      )
 	    );
@@ -37302,7 +37342,7 @@
 	module.exports = HistoryTable;
 
 /***/ },
-/* 348 */
+/* 349 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -37337,7 +37377,7 @@
 	module.exports = HistoryHead;
 
 /***/ },
-/* 349 */
+/* 350 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -37361,13 +37401,18 @@
 	    }
 	  },
 	  render: function render() {
+	    var formattedTime = this.constructor.getTime(this.props.visited);
 	    return React.createElement(
 	      "tr",
 	      null,
 	      React.createElement(
 	        "td",
 	        { className: "mdl-data-table__cell--non-numeric" },
-	        this.constructor.getTime(this.props.visited)
+	        this.props.stale ? React.createElement(
+	          "em",
+	          null,
+	          formattedTime
+	        ) : formattedTime
 	      ),
 	      React.createElement(
 	        "td",
@@ -37394,7 +37439,7 @@
 	module.exports = HistoryItem;
 
 /***/ },
-/* 350 */
+/* 351 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -37440,13 +37485,13 @@
 	};
 
 /***/ },
-/* 351 */
+/* 352 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
 	
 	var Fluxxor = __webpack_require__(247);
-	var actions = __webpack_require__(350);
+	var actions = __webpack_require__(351);
 	
 	var HistoryStore = Fluxxor.createStore({
 	  initialize: function initialize() {
@@ -37486,42 +37531,6 @@
 	});
 	
 	module.exports = HistoryStore;
-
-/***/ },
-/* 352 */
-/***/ function(module, exports, __webpack_require__) {
-
-	"use strict";
-	
-	var React = __webpack_require__(1);
-	
-	var ProgressBar = React.createClass({
-	    displayName: "ProgressBar",
-	
-	    render: function render() {
-	        var loaderStyle = {
-	            width: "100%"
-	        };
-	        var bar1Style = {
-	            width: "0%"
-	        };
-	        var bar2Style = {
-	            width: "100%"
-	        };
-	        var bar3Style = bar1Style;
-	        return React.createElement(
-	            "div",
-	            {
-	                className: "mdl-progress mdl-progress__indeterminate is-upgraded",
-	                style: loaderStyle },
-	            React.createElement("div", { className: "progressbar bar bar1", style: bar1Style }),
-	            React.createElement("div", { className: "bufferbar bar bar2", style: bar2Style }),
-	            React.createElement("div", { className: "auxbar bar bar3", style: bar3Style })
-	        );
-	    }
-	});
-	
-	module.exports = ProgressBar;
 
 /***/ }
 /******/ ]);

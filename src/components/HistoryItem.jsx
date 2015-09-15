@@ -15,9 +15,12 @@ let HistoryItem = React.createClass({
     }
   },
   render: function () {
+    let formattedTime = this.constructor.getTime(this.props.visited);
     return (
       <tr>
-        <td className="mdl-data-table__cell--non-numeric">{this.constructor.getTime(this.props.visited)}</td>
+        <td className="mdl-data-table__cell--non-numeric">
+          {this.props.stale ? <em>{formattedTime}</em> : formattedTime}
+        </td>
         <td className="mdl-data-table__cell--non-numeric"><img src={"chrome://favicon/" + this.props.url} /></td>
         <td className="mdl-data-table__cell--non-numeric">
           <a

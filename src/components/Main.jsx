@@ -25,7 +25,7 @@ let Main = React.createClass({
           <Drawer query={this.state.query} selectedDay={this.state.date} />
           <main className="mdl-layout__content">
             {this.state.loading ? <ProgressBar /> : null}
-            <HistoryTable pages={this.state.pages} />
+            <HistoryTable selectedDay={this.state.date} pages={this.state.pages} />
           </main>
         </div>
       );
