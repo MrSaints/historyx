@@ -21,7 +21,8 @@ const Main = React.createClass({
     render() {
         const noResults = (
             <div className="alert alert-warning" role="alert">
-                No results found.
+                <strong>No results found.</strong>
+                {this.state.search.query !== "" ? " You searched for: \"" + this.state.search.query + "\"" : null}
             </div>
         );
         const results = (

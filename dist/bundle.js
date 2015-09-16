@@ -20505,7 +20505,12 @@
 	        var noResults = _react2["default"].createElement(
 	            "div",
 	            { className: "alert alert-warning", role: "alert" },
-	            "No results found."
+	            _react2["default"].createElement(
+	                "strong",
+	                null,
+	                "No results found."
+	            ),
+	            this.state.search.query !== "" ? " You searched for: \"" + this.state.search.query + "\"" : null
 	        );
 	        var results = _react2["default"].createElement(
 	            "div",
