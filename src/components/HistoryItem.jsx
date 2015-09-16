@@ -29,7 +29,7 @@ class HistoryItem extends React.Component {
             <tr>
                 <td>{formattedTime}</td>
                 <td style={itemUrlStyle}>
-                    <a href="{info.url}">
+                    <a href={info.url} target="_blank">
                         {this._truncate(info.title || info.url)}
                     </a>
                     &nbsp;<small className="text-muted" title="Total visits">[{info.visitCount}]</small>
