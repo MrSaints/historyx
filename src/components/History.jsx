@@ -9,6 +9,9 @@ class History extends React.Component {
     }
 
     getItems() {
+        if (parseInt(this.props.paginate.limit) === 0) {
+            return this.props.items;
+        }
         const cursor = this.props.paginate.page * this.props.paginate.limit;
         return this.props.items.slice(cursor, cursor + this.props.paginate.limit);
     }

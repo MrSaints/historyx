@@ -45,13 +45,13 @@ const Controls = React.createClass({
                         value={this.props.paginate.limit}>
                         <option value="50">50</option>
                         <option value="100">100</option>
+                        <option value="200">200</option>
                         <option value="500">500</option>
-                        <option value="1000">1000</option>
                         <option value="0">All</option>
                     </select>
                 </div>
                 <div className="form-group">
-                    {cursor+1}-{end >= this.props.total ? this.props.total : end}
+                    {cursor+1}-{!end || end >= this.props.total ? this.props.total : end}
                     &nbsp;of {this.props.total}
                 </div>
                 <div className="form-group">
