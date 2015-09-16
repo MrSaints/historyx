@@ -13,7 +13,7 @@ class History extends React.Component {
             return this.props.items;
         }
         const cursor = this.props.paginate.page * this.props.paginate.limit;
-        return this.props.items.slice(cursor, cursor + this.props.paginate.limit);
+        return this.props.items.slice(cursor, parseInt(cursor)+parseInt(this.props.paginate.limit));
     }
 
     render() {
