@@ -19,13 +19,7 @@ const Main = React.createClass({
     },
 
     render() {
-        const noResults = (
-            <div className="alert alert-warning" role="alert">
-                <strong>No results found.</strong>
-                {this.state.search.query !== "" ? " You searched for: \"" + this.state.search.query + "\"" : null}
-            </div>
-        );
-        const results = (
+        let results = (
             <div>
             <Controls
                 loading={this.state.history.loading}
@@ -42,6 +36,14 @@ const Main = React.createClass({
                 total={this.state.history.items.length} />
             </div>
         );
+        if (this.state.history.items.length === 0) {
+            results = (
+                <div className="alert alert-warning" role="alert">
+                    <strong>No results found.</strong>
+                    {this.state.search.query !== "" ? " You searched for: \"" + this.state.search.query + "\"" : null}
+                </div>
+            );
+        }
         return (
             <div>
                 <Header
@@ -54,7 +56,7 @@ const Main = React.createClass({
                             query={this.state.search.query}
                             paginate={this.state.search.paginate} />
                         <div className="content col-md-10 col-md-offset-2">
-                            {this.state.history.items.length === 0 ? noResults : results}
+                            {results}
                         </div>
                     </div>
                 </div>
