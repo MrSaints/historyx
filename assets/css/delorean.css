@@ -31,9 +31,6 @@ body {
     .controls .form-group {
         margin: 0 .5rem;
     }
-    .controls .spinner-loader {
-        float: left;
-    }
 
 .title {
     font-size: 1.5rem;

@@ -34,7 +34,7 @@ const Controls = React.createClass({
         const end = cursor + parseInt(this.props.paginate.limit);
         return (
             <div className="controls">
-            {this.props.loading ? <div className="spinner-loader">Loading...</div> : null}
+            {this.props.loading ? <div className="spinner-loader pull-left">Loading...</div> : null}
             <form className="form-inline">
                 <div className="form-group">
                     <label htmlFor="limit-selector">View </label>
