@@ -7,7 +7,10 @@ const Header = React.createClass({
     mixins: [FluxMixin],
 
     getInitialState() {
-        return {query: this.props.query};
+        return {
+            submitted: false,
+            query: this.props.query
+        };
     },
 
     handleQueryChange(e) {
@@ -18,11 +21,39 @@ const Header = React.createClass({
         e.preventDefault();
         const flux = this.getFlux();
         const q = this.state.query.trim();
+        this.setState({submitted: true});
         flux.actions.search.changeQuery(q);
         flux.actions.history.load(this.props.date, q);
     },
 
+    handleClear(e) {
+        e.preventDefault();
+        this.setState({query: ""});
+        if (!this.state.submitted) {
+            return;
+        }
+        this.setState({submitted: false});
+        const flux = this.getFlux();
+        flux.actions.search.changeQuery("");
+        flux.actions.history.load(this.props.date);
+    },
+
     render() {
+        let clearButton = "",
+            inputClass = "";
+        if (this.state.query.length > 0) {
+            inputClass = "input-group";
+            clearButton = (
+                <span className="input-group-btn">
+                    <button
+                        className="btn btn-secondary"
+                        type="button"
+                        onClick={this.handleClear}>
+                        <i className="material-icons">clear</i>
+                    </button>
+                </span>
+            );
+        }
         return (
             <header className="navbar navbar-dark navbar-fixed-top" role="banner">
                 <div className="container-fluid">
@@ -30,11 +61,15 @@ const Header = React.createClass({
                     <form
                         className="form-inline navbar-form pull-right"
                         onSubmit={this.handleSearchSubmit}>
-                        <input
-                            className="form-control"
-                            type="text"
-                            placeholder="Search"
-                            onChange={this.handleQueryChange} />
+                        <div className={inputClass}>
+                            <input
+                                className="form-control"
+                                type="text"
+                                placeholder="Search"
+                                value={this.state.query}
+                                onChange={this.handleQueryChange} />
+                            {clearButton}
+                        </div>
                     </form>
                 </div>
             </header>

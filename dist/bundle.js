@@ -20502,16 +20502,6 @@
 	    },
 	
 	    render: function render() {
-	        var noResults = _react2["default"].createElement(
-	            "div",
-	            { className: "alert alert-warning", role: "alert" },
-	            _react2["default"].createElement(
-	                "strong",
-	                null,
-	                "No results found."
-	            ),
-	            this.state.search.query !== "" ? " You searched for: \"" + this.state.search.query + "\"" : null
-	        );
 	        var results = _react2["default"].createElement(
 	            "div",
 	            null,
@@ -20529,6 +20519,18 @@
 	                paginate: this.state.search.paginate,
 	                total: this.state.history.items.length })
 	        );
+	        if (this.state.history.items.length === 0) {
+	            results = _react2["default"].createElement(
+	                "div",
+	                { className: "alert alert-warning", role: "alert" },
+	                _react2["default"].createElement(
+	                    "strong",
+	                    null,
+	                    "No results found."
+	                ),
+	                this.state.search.query !== "" ? " You searched for: \"" + this.state.search.query + "\"" : null
+	            );
+	        }
 	        return _react2["default"].createElement(
 	            "div",
 	            null,
@@ -20548,7 +20550,7 @@
 	                    _react2["default"].createElement(
 	                        "div",
 	                        { className: "content col-md-10 col-md-offset-2" },
-	                        this.state.history.items.length === 0 ? noResults : results
+	                        results
 	                    )
 	                )
 	            )
@@ -20587,7 +20589,10 @@
 	    mixins: [FluxMixin],
 	
 	    getInitialState: function getInitialState() {
-	        return { query: this.props.query };
+	        return {
+	            submitted: false,
+	            query: this.props.query
+	        };
 	    },
 	
 	    handleQueryChange: function handleQueryChange(e) {
@@ -20598,11 +20603,45 @@
 	        e.preventDefault();
 	        var flux = this.getFlux();
 	        var q = this.state.query.trim();
+	        this.setState({ submitted: true });
 	        flux.actions.search.changeQuery(q);
 	        flux.actions.history.load(this.props.date, q);
 	    },
 	
+	    handleClear: function handleClear(e) {
+	        e.preventDefault();
+	        this.setState({ query: "" });
+	        if (!this.state.submitted) {
+	            return;
+	        }
+	        this.setState({ submitted: false });
+	        var flux = this.getFlux();
+	        flux.actions.search.changeQuery("");
+	        flux.actions.history.load(this.props.date);
+	    },
+	
 	    render: function render() {
+	        var clearButton = "",
+	            inputClass = "";
+	        if (this.state.query.length > 0) {
+	            inputClass = "input-group";
+	            clearButton = _react2["default"].createElement(
+	                "span",
+	                { className: "input-group-btn" },
+	                _react2["default"].createElement(
+	                    "button",
+	                    {
+	                        className: "btn btn-secondary",
+	                        type: "button",
+	                        onClick: this.handleClear },
+	                    _react2["default"].createElement(
+	                        "i",
+	                        { className: "material-icons" },
+	                        "clear"
+	                    )
+	                )
+	            );
+	        }
 	        return _react2["default"].createElement(
 	            "header",
 	            { className: "navbar navbar-dark navbar-fixed-top", role: "banner" },
@@ -20619,11 +20658,17 @@
 	                    {
 	                        className: "form-inline navbar-form pull-right",
 	                        onSubmit: this.handleSearchSubmit },
-	                    _react2["default"].createElement("input", {
-	                        className: "form-control",
-	                        type: "text",
-	                        placeholder: "Search",
-	                        onChange: this.handleQueryChange })
+	                    _react2["default"].createElement(
+	                        "div",
+	                        { className: inputClass },
+	                        _react2["default"].createElement("input", {
+	                            className: "form-control",
+	                            type: "text",
+	                            placeholder: "Search",
+	                            value: this.state.query,
+	                            onChange: this.handleQueryChange }),
+	                        clearButton
+	                    )
 	                )
 	            )
 	        );
