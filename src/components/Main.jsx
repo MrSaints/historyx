@@ -19,6 +19,28 @@ const Main = React.createClass({
     },
 
     render() {
+        const noResults = (
+            <div className="alert alert-warning" role="alert">
+                No results found.
+            </div>
+        );
+        const results = (
+            <div>
+            <Controls
+                loading={this.state.history.loading}
+                paginate={this.state.search.paginate}
+                total={this.state.history.items.length} />
+            <History
+                items={this.state.history.items}
+                date={this.state.search.date}
+                query={this.state.search.query}
+                paginate={this.state.search.paginate} />
+            <Controls
+                loading={this.state.history.loading}
+                paginate={this.state.search.paginate}
+                total={this.state.history.items.length} />
+            </div>
+        );
         return (
             <div>
                 <Header
@@ -31,19 +53,7 @@ const Main = React.createClass({
                             query={this.state.search.query}
                             paginate={this.state.search.paginate} />
                         <div className="content col-md-10 col-md-offset-2">
-                            <Controls
-                                loading={this.state.history.loading}
-                                paginate={this.state.search.paginate}
-                                total={this.state.history.items.length} />
-                            <History
-                                items={this.state.history.items}
-                                date={this.state.search.date}
-                                query={this.state.search.query}
-                                paginate={this.state.search.paginate} />
-                            <Controls
-                                loading={this.state.history.loading}
-                                paginate={this.state.search.paginate}
-                                total={this.state.history.items.length} />
+                            {this.state.history.items.length === 0 ? noResults : results}
                         </div>
                     </div>
                 </div>
