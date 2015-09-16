@@ -1,38 +1,42 @@
-let React = require("react");
-let moment = require("moment");
+import React, {PropTypes} from "react";
+import Moment from "moment";
 
-let HistoryItem = React.createClass({
-  _truncate: function (s) {
-    let newString = s.substr(0, 100);
-    if (s.length > 100) {
-      newString += "..."
+class HistoryItem extends React.Component {
+    constructor(props) {
+        super(props);
     }
-    return newString
-  },
-  render: function () {
-    let formattedTime = moment(this.props.visited).format("hh:mm:ss A");
-    if (this.props.stale) {
-      formattedTime = (<em>{moment(this.props.visited).format("hh:mm A DD-MM-YYYY")}</em>);
-    }
-    return (
-      <tr>
-        <td className="mdl-data-table__cell--non-numeric">{formattedTime}</td>
-        <td className="mdl-data-table__cell--non-numeric"><img src={"chrome://favicon/" + this.props.url} /></td>
-        <td className="mdl-data-table__cell--non-numeric">
-          <a
-            href={this.props.url}
-            target="_blank"
-            className="mdl-badge"
-            data-badge={this.props.count}>
-            {this._truncate(this.props.title || this.props.url)}
-          </a>
-        </td>
-        <td>
-          &nbsp;
-        </td>
-      </tr>
-    );
-  }
-});
 
-module.exports = HistoryItem;
+    _truncate(s, limit = 100) {
+        let t = s.substr(0, limit);
+        if (s.length > limit) {
+          t += "...";
+        }
+        return t;
+    }
+
+    render() {
+        const info = this.props.info;
+        const itemUrlStyle = {
+            background: "url(chrome://favicon/" + info.url + ") no-repeat 0.75rem",
+            paddingLeft: "2.5rem"
+        }
+        const dateTime = Moment(info.lastVisitTime);
+        let formattedTime = dateTime.format("hh:mm:ss A");
+        if (this.props.stale) {
+            formattedTime = (<em className="text-muted" title="Last visited time">{dateTime.format("hh:mm A DD-MM-YYYY")}</em>);
+        }
+        return (
+            <tr>
+                <td>{formattedTime}</td>
+                <td style={itemUrlStyle}>
+                    <a href="{info.url}">
+                        {this._truncate(info.title || info.url)}
+                    </a>
+                    &nbsp;<small className="text-muted" title="Total visits">[{info.visitCount}]</small>
+                </td>
+            </tr>
+        );
+    }
+}
+
+export default HistoryItem;

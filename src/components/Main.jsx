@@ -1,36 +1,55 @@
-let React = require("react");
+import React, {PropTypes} from "react";
+import Header from "./Header.jsx";
+import Sidebar from "./Sidebar.jsx";
+import History from "./History.jsx";
+import Controls from "./Controls.jsx";
 
-let Header = require("./Header.jsx");
-let Drawer = require("./Drawer.jsx");
-let HistoryTable = require("./HistoryTable.jsx");
+import Fluxxor, { StoreWatchMixin } from "fluxxor";
+const FluxMixin = Fluxxor.FluxMixin(React);
 
-let Fluxxor = require("fluxxor");
-let FluxMixin = Fluxxor.FluxMixin(React),
-    StoreWatchMixin = Fluxxor.StoreWatchMixin;
+const Main = React.createClass({
+    mixins: [FluxMixin, StoreWatchMixin("history", "search")],
 
-let Main = React.createClass({
-    mixins: [FluxMixin, StoreWatchMixin("HistoryStore")],
-    getStateFromFlux: function() {
-      let HistoryStore = this.getFlux().store("HistoryStore");
-      return HistoryStore.getState();
+    getStateFromFlux() {
+        const flux = this.getFlux();
+        return {
+            history: flux.store("history").getState(),
+            search: flux.store("search").getState()
+        };
     },
-    componentDidMount: function() {
-      this.getFlux().actions.loadHistory();
-    },
-    render: function () {
-      let contentStyle = {
-        marginTop: "64px"
-      };
-      return (
-        <div className="mdl-layout mdl-layout--fixed-drawer mdl-layout--fixed-header">
-          <Header query={this.state.query} selectedDay={this.state.date} loading={this.state.loading} />
-          <Drawer query={this.state.query} selectedDay={this.state.date} />
-          <main className="mdl-layout__content" style={contentStyle}>
-            <HistoryTable selectedDay={this.state.date} pages={this.state.pages} />
-          </main>
-        </div>
-      );
+
+    render() {
+        return (
+            <div>
+                <Header
+                    date={this.state.search.date}
+                    query={this.state.search.query} />
+                <div className="container-fluid">
+                    <div className="row">
+                        <Sidebar
+                            date={this.state.search.date}
+                            query={this.state.search.query}
+                            paginate={this.state.search.paginate} />
+                        <div className="content col-md-10 col-md-offset-2">
+                            <Controls
+                                loading={this.state.history.loading}
+                                paginate={this.state.search.paginate}
+                                total={this.state.history.items.length} />
+                            <History
+                                items={this.state.history.items}
+                                date={this.state.search.date}
+                                query={this.state.search.query}
+                                paginate={this.state.search.paginate} />
+                            <Controls
+                                loading={this.state.history.loading}
+                                paginate={this.state.search.paginate}
+                                total={this.state.history.items.length} />
+                        </div>
+                    </div>
+                </div>
+            </div>
+        );
     }
 });
 
-module.exports = Main;
+export default Main;

@@ -1,0 +1,40 @@
+body {
+    padding-top: 54px;
+}
+
+.navbar {
+    background: #2196F3;
+}
+
+.sidebar, .content {
+    padding: 1.5rem;
+}
+    .sidebar {
+        border-right: 1px solid #B6B6B6;
+        bottom: 0px;
+        left: 0px;
+        position: fixed;
+        top: 54px;
+    }
+
+.controls {
+    margin-bottom: 1rem;
+    text-align: right;
+}
+    .controls .material-icons {
+        font-size: 16px;
+        vertical-align: middle;
+    }
+    .controls .c-select {
+        margin: 0 .5rem;
+    }
+    .controls .form-group {
+        margin: 0 .5rem;
+    }
+    .controls .spinner-loader {
+        float: left;
+    }
+
+.title {
+    font-size: 1.5rem;
+}

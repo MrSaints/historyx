@@ -12,7 +12,6 @@
   border-collapse: collapse;
   border-spacing: 0;
   user-select: none;
-  margin: 0 1rem;
 }
 
 .DayPicker-NavBar {
@@ -34,12 +33,12 @@
 
 .DayPicker-NavButton--prev {
   left: 1rem;
-  background-image: url("./prev.svg");
+  background-image: url("/assets/img/prev.svg");
 }
 
 .DayPicker-NavButton--next {
   right: 1rem;
-  background-image: url("./next.svg");
+  background-image: url("/assets/img/next.svg");
 }
 
 .DayPicker-Caption {
@@ -85,7 +84,7 @@
 }
 
 .DayPicker-Day--today {
-  color: #ff4081;
+  color: #FF4081;
   font-weight: 500;
 }
 
@@ -107,7 +106,7 @@
 
 .DayPicker-Day--selected:not(.DayPicker-Day--disabled):not(.DayPicker-Day--outside) {
   color: #FFF;
-  background-color: #3f51b5;
+  background-color: #1976D2;
 }
 
 .DayPicker--ar {

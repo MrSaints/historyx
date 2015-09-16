@@ -1,6 +1,6 @@
 {
   "name": "delorean",
-  "version": "1.0.0",
+  "version": "2.0.0",
   "description": "A Chrome extension to enhance your browsing history experience.",
   "main": "dist/bundle.js",
   "scripts": {
@@ -15,7 +15,6 @@
     "moment": "^2.10.6",
     "react": "^0.13.3",
     "react-day-picker": "^1.0.5",
-    "react-tap-event-plugin": "^0.1.7",
     "webpack": "^1.12.1"
   },
   "dependencies": {}

@@ -1,46 +1,29 @@
-let Fluxxor = require("fluxxor");
-let actions = require("../actions.jsx");
+import Fluxxor from "fluxxor";
+import Constants from "../constants/HistoryConstants.jsx";
 
-let HistoryStore = Fluxxor.createStore({
-  initialize: function() {
-    this.loading = false;
-    this.query = "";
-    this.date = new Date();
-    this.pages = [];
+const HistoryStore = Fluxxor.createStore({
+    initialize() {
+        this.state = {};
+        this.state.loading = false;
+        this.state.items = [];
 
-    this.bindActions(
-      actions.constants.CHANGE_QUERY, this.onChangeQuery,
-      actions.constants.CHANGE_DATE, this.onChangeDate,
-      actions.constants.LOAD_HISTORY, this.onLoadHistory,
-      actions.constants.LOAD_HISTORY_COMPLETE, this.onLoadHistoryComplete
-    );
-  },
-  onChangeQuery: function (payload) {
-    this.query = payload.query;
-    this.emit("change");
-  },
-  onChangeDate: function (payload) {
-    this.date = payload.date;
-    this.emit("change");
-  },
-  onLoadHistory: function() {
-    this.loading = true;
-    this.emit("change");
-  },
-  onLoadHistoryComplete: function(payload) {
-      this.loading = false;
-
-      this.pages = payload.pages;
-      this.emit("change");
-  },
-  getState: function() {
-    return {
-      query: this.query,
-      date: this.date,
-      pages: this.pages,
-      loading: this.loading
-    };
-  },
+        this.bindActions(
+            Constants.LOAD_HISTORY, this.onLoadHistory,
+            Constants.LOAD_HISTORY_COMPLETE, this.onLoadHistoryComplete
+        );
+    },
+    onLoadHistory() {
+        this.state.loading = true;
+        this.emit("change");
+    },
+    onLoadHistoryComplete(obj) {
+        this.state.loading = false;
+        this.state.items = obj;
+        this.emit("change");
+    },
+    getState() {
+        return this.state;
+    }
 });
 
-module.exports = HistoryStore;
+export default HistoryStore;

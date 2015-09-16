@@ -1,15 +1,14 @@
-let React = require("react");
-let Main = require("./components/Main.jsx");
+import React from "react";
+import Main from "./components/Main.jsx";
 
-let Fluxxor = require("fluxxor");
-let actions = require("./actions.jsx");
-let HistoryStore = require("./stores/HistoryStore.jsx");
-let stores = {
-    HistoryStore: new HistoryStore()
-};
-let flux = new Fluxxor.Flux(stores, actions.methods);
+import Fluxxor from "fluxxor";
+import Stores from "./stores/Stores.jsx";
+import Actions from "./actions/Actions.jsx";
+const flux = new Fluxxor.Flux(Stores, Actions);
+
+flux.actions.history.load();
 
 React.render(
-  <Main flux={flux} />,
-  document.getElementById("root")
+    <Main flux={flux} />,
+    document.getElementById("js-delorean")
 );

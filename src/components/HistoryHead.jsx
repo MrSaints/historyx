@@ -1,17 +1,19 @@
-let React = require("react");
+import React, {PropTypes} from "react";
 
-let HistoryHead = React.createClass({
-  render: function () {
-    return (
-      <thead>
-        <tr>
-          <th className="mdl-data-table__cell--non-numeric">Last Visited</th>
-          <th className="mdl-data-table__cell--non-numeric" colSpan="2">Page</th>
-          <th>&nbsp;</th>
-        </tr>
-      </thead>
-    );
-  }
-});
+class HistoryHead extends React.Component {
+    constructor(props) {
+        super(props);
+    }
 
-module.exports = HistoryHead;
+    render() {
+        return (
+            <thead>
+                <tr>
+                    <th colSpan="2">{this.props.title}</th>
+                </tr>
+            </thead>
+        );
+    }
+}
+
+export default HistoryHead;

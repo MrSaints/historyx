@@ -1,0 +1,4 @@
+export default {
+    "LOAD_HISTORY": "LOAD_HISTORY",
+    "LOAD_HISTORY_COMPLETE": "LOAD_HISTORY_COMPLETE"
+};
