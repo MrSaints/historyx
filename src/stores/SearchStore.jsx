@@ -5,6 +5,7 @@ const SearchStore = Fluxxor.createStore({
     initialize() {
         this.state = {};
         this.state.query = "";
+        this.state.date = new Date();
         this.state.paginate = {
             page: 0,
             limit: 100
