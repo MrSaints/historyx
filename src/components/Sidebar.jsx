@@ -13,15 +13,15 @@ const Sidebar = React.createClass({
     },
 
     handleDayClick(e, day) {
-      const today = new Date();
-      if (day > today) {
-        return false;
-      }
-      const flux = this.getFlux();
-      this.setState({date: day});
-      flux.actions.search.changeDate(day);
-      flux.actions.search.changePaginate(0, this.props.paginate.limit);
-      flux.actions.history.load(day, this.props.query);
+        const today = new Date();
+        if (day > today /*|| Moment(this.state.date).isSame(day, "day")*/) {
+            return;
+        }
+        const flux = this.getFlux();
+        this.setState({date: day});
+        flux.actions.search.changeDate(day);
+        flux.actions.search.changePaginate(0, this.props.paginate.limit);
+        flux.actions.history.load(day, this.props.query);
     },
 
     render() {
