@@ -9,9 +9,10 @@
         <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
         <link rel="stylesheet" href="/assets/css/bootstrap.min.css">
         <link rel="stylesheet" href="/assets/css/react-date-picker.css">
-        <link rel="stylesheet" href="/assets/css/spinner.css">
+        <link rel="stylesheet" href="/assets/css/loader.css">
         <style>
             body {
+                background: #fafafa;
                 padding-top: 54px;
             }
 
@@ -23,18 +24,22 @@
                 padding: 1.5rem;
             }
                 .sidebar {
+                    background: #FFF;
                     border-right: 1px solid rgba(0, 0, 0, 0.12);
                     bottom: 0px;
+                    box-shadow: 0 4px 5px 0 rgba(0, 0, 0, 0.2),
+                                0 1px 10px 0 rgba(0, 0, 0, 0.14),
+                                0 2px 4px -1px rgba(0, 0, 0, 0.12);
                     left: 0px;
+                    padding-top: 2.125rem;
                     position: fixed;
-                    top: 54px;
+                    top: 44px;
                     width: 320px;
                 }
-                    .datepicker {
+                    .sidebar > .datepicker {
                         position: relative;
                     }
                 .content {
-                    background: #fafafa;
                     margin-left: 320px;
                 }
 
@@ -107,8 +112,19 @@
                     margin-left: 1rem;
                 }
                 .paginator__select {
+                    border-color: rgba(0, 0, 0, 0.12);
                     margin-left: 0.5rem;
                 }
+                .paginator__nav, .paginator__nav {
+                    border-color: rgba(0, 0, 0, 0.12);
+                }
+                    .paginator__nav:disabled {
+                        opacity: 0.55;
+                    }
+                    .paginator__nav:hover, .paginator__nav:focus {
+                        background: #C5CAE9;
+                        border-color: rgba(0, 0, 0, 0.12);
+                    }
 
             .material-icons {
                 font-size: 1rem;

@@ -1,8 +1,9 @@
 import React, {PropTypes} from "react";
 import Header from "./Header.jsx";
 import Sidebar from "./Sidebar.jsx";
-import History from "./History.jsx";
 import Paginator from "./Paginator.jsx";
+import History from "./History.jsx";
+import Loader from "./Loader.jsx";
 
 import Fluxxor, { StoreWatchMixin } from "fluxxor";
 const FluxMixin = Fluxxor.FluxMixin(React);
@@ -22,7 +23,6 @@ const Main = React.createClass({
         let results = (
             <div>
             <Paginator
-                loading={this.state.history.loading}
                 paginate={this.state.search.paginate}
                 total={this.state.history.items.length} />
             <History
@@ -31,7 +31,6 @@ const Main = React.createClass({
                 query={this.state.search.query}
                 paginate={this.state.search.paginate} />
             <Paginator
-                loading={this.state.history.loading}
                 paginate={this.state.search.paginate}
                 total={this.state.history.items.length} />
             </div>
@@ -60,6 +59,7 @@ const Main = React.createClass({
                         </div>
                     </div>
                 </div>
+                <Loader status={this.state.history.loading} />
             </div>
         );
     }

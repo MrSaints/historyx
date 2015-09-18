@@ -35,7 +35,6 @@ const Paginator = React.createClass({
 
         return (
             <div className="paginator">
-            {this.props.loading ? <div className="spinner-loader pull-left">Loading...</div> : null}
             <form className="form-inline">
                 <div className="form-group paginator__block">
                     <label htmlFor="limit-selector">View </label>
@@ -59,14 +58,14 @@ const Paginator = React.createClass({
                     <div className="btn-group" role="group">
                         <button
                             type="button"
-                            className="btn btn-secondary"
+                            className="btn btn-secondary paginator__nav"
                             disabled={this.props.paginate.page === 0}
                             onClick={this.handlePrevPage}>
                             <i className="material-icons">keyboard_arrow_left</i>
                         </button>
                         <button
                             type="button"
-                            className="btn btn-secondary"
+                            className="btn btn-secondary paginator__nav"
                             disabled={this.props.paginate.page + 1 > Math.floor(this.props.total / this.props.paginate.limit)}
                             onClick={this.handleNextPage}>
                             <i className="material-icons">keyboard_arrow_right</i>
