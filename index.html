@@ -10,7 +10,75 @@
         <link rel="stylesheet" href="/assets/css/bootstrap.min.css">
         <link rel="stylesheet" href="/assets/css/react-day-picker.css">
         <link rel="stylesheet" href="/assets/css/spinner.css">
-        <link rel="stylesheet" href="/assets/css/delorean.css">
+        <style>
+            body {
+                padding-top: 54px;
+            }
+
+            .navbar {
+                background: #2196F3;
+            }
+
+            .sidebar, .content {
+                padding: 1.5rem;
+            }
+                .sidebar {
+                    border-right: 1px solid #B6B6B6;
+                    bottom: 0px;
+                    left: 0px;
+                    position: fixed;
+                    top: 54px;
+                }
+
+            .list-group-item {
+                padding: 0;
+            }
+            .history {
+                margin-bottom: 1rem;
+            }
+                .history__heading {
+                    font-size: 1.5rem;
+                    font-weight: bold;
+                    margin: 0;
+                    padding: .75rem 1.25rem;
+                }
+                .history__date, .history__url, .history__visits {
+                    display: inline-block;
+                    padding: .75rem 1.25rem;
+                    vertical-align: top;
+                }
+                .history__date {
+                    border-right: 0.0625rem solid #ddd;
+                    width: 15%;
+                }
+                .history__url {
+                    padding-left: 3.25rem;
+                    overflow: hidden;
+                    text-overflow: ellipsis;
+                    white-space: nowrap;
+                    width: 75%;
+                }
+                .history__visits {
+                    width: 10%;
+                    text-align: right;
+                }
+
+            .paginator {
+                margin-bottom: 1rem;
+                text-align: right;
+            }
+                .paginator__block {
+                    margin-left: 1rem;
+                }
+                .paginator__select {
+                    margin-left: 0.5rem;
+                }
+
+            .material-icons {
+                font-size: 1rem;
+                vertical-align: middle;
+            }
+        </style>
     </head>
     <body>
         <div id="js-delorean"></div>
