@@ -59,7 +59,9 @@ const Header = React.createClass({
                 className="navbar navbar-dark navbar-fixed-top"
                 role="banner">
                 <div className="container-fluid">
-                    <a className="navbar-brand" href="#">DeLorean</a>
+                    <a className="navbar-brand" href="#" title="Chrome History (Powered by DeLorean)">
+                        History
+                    </a>
                     <form
                         className="form-inline navbar-form pull-right"
                         onSubmit={this.handleSearchSubmit}>

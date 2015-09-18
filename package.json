@@ -1,6 +1,6 @@
 {
   "name": "delorean",
-  "version": "2.0.0",
+  "version": "2.1.0",
   "description": "A Chrome extension to enhance your browsing history experience.",
   "main": "dist/bundle.js",
   "scripts": {
