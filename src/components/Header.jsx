@@ -39,21 +39,16 @@ const Header = React.createClass({
     },
 
     render() {
-        let clearButton = "",
-            inputClass = "";
-        if (this.state.query.length > 0) {
-            inputClass = "input-group";
-            clearButton = (
-                <span className="input-group-btn">
-                    <button
-                        className="btn btn-secondary"
-                        type="button"
-                        onClick={this.handleClear}>
-                        <i className="material-icons">clear</i>
-                    </button>
-                </span>
-            );
-        }
+        const clearButton = (
+            <span className="input-group-btn">
+                <button
+                    className="btn btn-danger"
+                    type="button"
+                    onClick={this.handleClear}>
+                    <i className="material-icons">clear</i>
+                </button>
+            </span>
+        );
         return (
             <header
                 className="navbar navbar-dark navbar-fixed-top"
@@ -65,14 +60,14 @@ const Header = React.createClass({
                     <form
                         className="form-inline navbar-form pull-right"
                         onSubmit={this.handleSearchSubmit}>
-                        <div className={inputClass}>
+                        <div className="input-group">
                             <input
                                 className="form-control"
                                 type="text"
                                 placeholder="Search"
                                 value={this.state.query}
                                 onChange={this.handleQueryChange} />
-                            {clearButton}
+                            {this.state.query.length > 0 ? clearButton : null}
                         </div>
                     </form>
                 </div>
