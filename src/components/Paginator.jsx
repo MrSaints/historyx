@@ -3,7 +3,7 @@ import React, {PropTypes} from "react";
 import Fluxxor from "fluxxor";
 const FluxMixin = Fluxxor.FluxMixin(React);
 
-const Controls = React.createClass({
+const Paginator = React.createClass({
     mixins: [FluxMixin],
 
     handleLimitChange(e) {
@@ -32,15 +32,16 @@ const Controls = React.createClass({
     render() {
         const cursor = this.props.paginate.page * this.props.paginate.limit;
         const end = cursor + parseInt(this.props.paginate.limit);
+
         return (
-            <div className="controls">
+            <div className="paginator">
             {this.props.loading ? <div className="spinner-loader pull-left">Loading...</div> : null}
             <form className="form-inline">
-                <div className="form-group">
+                <div className="form-group paginator__block">
                     <label htmlFor="limit-selector">View </label>
                     <select
                         id="limit-selector"
-                        className="c-select"
+                        className="c-select paginator__select"
                         onChange={this.handleLimitChange}
                         value={this.props.paginate.limit}>
                         <option value="50">50</option>
@@ -50,11 +51,11 @@ const Controls = React.createClass({
                         <option value="0">All</option>
                     </select>
                 </div>
-                <div className="form-group">
+                <div className="form-group paginator__block">
                     {cursor+1}-{!end || end >= this.props.total ? this.props.total : end}
                     &nbsp;of {this.props.total}
                 </div>
-                <div className="form-group">
+                <div className="form-group paginator__block">
                     <div className="btn-group" role="group">
                         <button
                             type="button"
@@ -78,4 +79,4 @@ const Controls = React.createClass({
     }
 });
 
-export default Controls;
+export default Paginator;
