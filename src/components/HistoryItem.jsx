@@ -24,7 +24,7 @@ class HistoryItem extends React.Component {
                 <div className="history__url" style={favicon}>{info.title || info.url}</div>
                 <div className="history__date">{formattedTime}</div>
                 <div className="history__visits">
-                    <span className="label label-default" title="Total visits">
+                    <span className="label label-default label-history" title="Total visits">
                        {info.visitCount}
                     </span>
                 </div>

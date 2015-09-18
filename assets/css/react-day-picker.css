@@ -106,7 +106,7 @@
 
 .DayPicker-Day--selected:not(.DayPicker-Day--disabled):not(.DayPicker-Day--outside) {
   color: #FFF;
-  background-color: #1976D2;
+  background-color: #3F51B5;
 }
 
 .DayPicker--ar {

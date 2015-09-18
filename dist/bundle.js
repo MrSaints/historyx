@@ -37548,7 +37548,7 @@
 	                    { className: "history__visits" },
 	                    _react2["default"].createElement(
 	                        "span",
-	                        { className: "label label-default", title: "Total visits" },
+	                        { className: "label label-default label-history", title: "Total visits" },
 	                        info.visitCount
 	                    )
 	                )
@@ -37600,7 +37600,7 @@
 	        value: function render() {
 	            return _react2["default"].createElement(
 	                "div",
-	                { className: "list-group-item" },
+	                { className: "list-group-item history__item--header" },
 	                _react2["default"].createElement(
 	                    "h1",
 	                    { className: "history__heading" },

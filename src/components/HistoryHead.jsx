@@ -7,7 +7,7 @@ class HistoryHead extends React.Component {
 
     render() {
         return (
-            <div className="list-group-item">
+            <div className="list-group-item history__item--header">
                 <h1 className="history__heading">
                     {this.props.title}
                 </h1>
