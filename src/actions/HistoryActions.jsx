@@ -6,8 +6,14 @@ import Moment from "moment";
 export default {
     load(d = new Date(), q = "") {
         this.dispatch(Constants.LOAD_HISTORY);
-        const start = Moment(d).startOf("day").valueOf();
-        const end = Moment(d).endOf("day").valueOf();
+
+        let start = d,
+            end = false;
+
+        if (d !== 0) {
+            start = Moment(d).startOf("day").valueOf();
+            end = Moment(d).endOf("day").valueOf();
+        }
 
         searchHistory(q, start, end)
             .then(HistoryItems => {
