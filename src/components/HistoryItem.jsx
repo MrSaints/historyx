@@ -12,7 +12,11 @@ class HistoryItem extends React.Component {
         const dateTime = Moment(info.lastVisitTime);
         let formattedTime = dateTime.format("hh:mm:ss A");
         if (this.props.stale) {
-            formattedTime = (<small className="text-muted history__date--stale" title="Last visited time">{dateTime.format("hh:mm A DD-MM-YYYY")}</small>);
+            formattedTime = (
+                <small className="text-muted history__date--stale" title="Last visited time">
+                    {dateTime.format("hh:mm A, DD-MM-YYYY")}
+                </small>
+            );
         }
 
         const favicon = {
