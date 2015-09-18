@@ -15,7 +15,7 @@ const Sidebar = React.createClass({
     handleDateChange(s, m) {
         const flux = this.getFlux();
         const date = m.toDate();
-        this.setState({date: date});
+        this.setState({date: m});
         flux.actions.search.changeDate(date);
         flux.actions.search.changePaginate(0, this.props.paginate.limit);
         flux.actions.history.load(date, this.props.query);
