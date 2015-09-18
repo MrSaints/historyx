@@ -19,7 +19,7 @@ class History extends React.Component {
     render() {
         const items = this.getItems();
         const selectedDay = Moment(this.props.date);
-        const selectedDayEnd = selectedDay.endOf("day").valueOf();
+
         let formattedTitle = "";
         if (this.props.query !== "") {
             formattedTitle += "Searching: \"" + this.props.query + "\" on ";
@@ -27,17 +27,15 @@ class History extends React.Component {
         formattedTitle += selectedDay.format("dddd, MMM Do YY'");
 
         return (
-            <table className="table table-bordered table-hover">
+            <div className="history list-group">
                 <HistoryHead title={formattedTitle} />
-                <tbody>
                 {items.map(obj => {
                     return <HistoryItem
                             key={obj.id}
                             info={obj}
-                            stale={obj.lastVisitTime > selectedDayEnd ? true : false} />
+                            stale={obj.lastVisitTime > selectedDay.endOf("day").valueOf() ? true : false} />
                 })}
-                </tbody>
-            </table>
+            </div>
         );
     }
 }

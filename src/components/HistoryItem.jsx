@@ -6,35 +6,29 @@ class HistoryItem extends React.Component {
         super(props);
     }
 
-    _truncate(s, limit = 100) {
-        let t = s.substr(0, limit);
-        if (s.length > limit) {
-          t += "...";
-        }
-        return t;
-    }
-
     render() {
         const info = this.props.info;
-        const itemUrlStyle = {
-            background: "url(chrome://favicon/" + info.url + ") no-repeat 0.75rem",
-            paddingLeft: "2.5rem"
-        }
+
         const dateTime = Moment(info.lastVisitTime);
         let formattedTime = dateTime.format("hh:mm:ss A");
         if (this.props.stale) {
             formattedTime = (<em className="text-muted" title="Last visited time">{dateTime.format("hh:mm A DD-MM-YYYY")}</em>);
         }
+
+        const favicon = {
+            background: "url(chrome://favicon/" + info.url + ") no-repeat 1.25rem",
+        };
+
         return (
-            <tr>
-                <td>{formattedTime}</td>
-                <td style={itemUrlStyle}>
-                    <a href={info.url} target="_blank">
-                        {this._truncate(info.title || info.url)}
-                    </a>
-                    &nbsp;<small className="text-muted" title="Total visits">[{info.visitCount}]</small>
-                </td>
-            </tr>
+            <a href={info.url} className="list-group-item" target="_blank">
+                <div className="history__date">{formattedTime}</div>
+                <div className="history__url" style={favicon}>{info.title || info.url}</div>
+                <div className="history__visits">
+                    <span className="label label-default" title="Total visits">
+                       {info.visitCount}
+                    </span>
+                </div>
+            </a>
         );
     }
 }

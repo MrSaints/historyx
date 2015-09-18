@@ -55,7 +55,9 @@ const Header = React.createClass({
             );
         }
         return (
-            <header className="navbar navbar-dark navbar-fixed-top" role="banner">
+            <header
+                className="navbar navbar-dark navbar-fixed-top"
+                role="banner">
                 <div className="container-fluid">
                     <a className="navbar-brand" href="#">DeLorean</a>
                     <form

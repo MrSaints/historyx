@@ -7,11 +7,11 @@ class HistoryHead extends React.Component {
 
     render() {
         return (
-            <thead>
-                <tr>
-                    <th colSpan="2">{this.props.title}</th>
-                </tr>
-            </thead>
+            <div className="list-group-item">
+                <h1 className="history__heading">
+                    {this.props.title}
+                </h1>
+            </div>
         );
     }
 }
