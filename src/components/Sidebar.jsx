@@ -8,14 +8,14 @@ const FluxMixin = Fluxxor.FluxMixin(React);
 const Sidebar = React.createClass({
     mixins: [FluxMixin],
 
-    getInitialState() {
+    /*getInitialState() {
         return {date: this.props.date};
-    },
+    },*/
 
     handleDateChange(s, m) {
         const flux = this.getFlux();
         const date = m.toDate();
-        this.setState({date: m});
+        //this.setState({date: m});
         flux.actions.search.changeDate(date);
         flux.actions.search.changePaginate(0, this.props.paginate.limit);
         flux.actions.history.load(date, this.props.query);
@@ -27,7 +27,7 @@ const Sidebar = React.createClass({
                 <div className="datepicker">
                     <DatePicker
                         onChange={this.handleDateChange}
-                        date={this.state.date}
+                        date={this.props.date}
                         maxDate={Moment()}
                         monthFormat="MMM" />
                 </div>
