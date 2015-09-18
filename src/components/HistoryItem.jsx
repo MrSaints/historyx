@@ -12,7 +12,7 @@ class HistoryItem extends React.Component {
         const dateTime = Moment(info.lastVisitTime);
         let formattedTime = dateTime.format("hh:mm:ss A");
         if (this.props.stale) {
-            formattedTime = (<em className="text-muted" title="Last visited time">{dateTime.format("hh:mm A DD-MM-YYYY")}</em>);
+            formattedTime = (<small className="text-muted history__date--stale" title="Last visited time">{dateTime.format("hh:mm A DD-MM-YYYY")}</small>);
         }
 
         const favicon = {
@@ -20,9 +20,9 @@ class HistoryItem extends React.Component {
         };
 
         return (
-            <a href={info.url} className="list-group-item" target="_blank">
-                <div className="history__date">{formattedTime}</div>
+            <a href={info.url} className="list-group-item history__item" target="_blank">
                 <div className="history__url" style={favicon}>{info.title || info.url}</div>
+                <div className="history__date">{formattedTime}</div>
                 <div className="history__visits">
                     <span className="label label-default" title="Total visits">
                        {info.visitCount}

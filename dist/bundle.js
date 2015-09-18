@@ -37520,8 +37520,8 @@
 	            var formattedTime = dateTime.format("hh:mm:ss A");
 	            if (this.props.stale) {
 	                formattedTime = _react2["default"].createElement(
-	                    "em",
-	                    { className: "text-muted", title: "Last visited time" },
+	                    "small",
+	                    { className: "text-muted history__date--stale", title: "Last visited time" },
 	                    dateTime.format("hh:mm A DD-MM-YYYY")
 	                );
 	            }
@@ -37532,16 +37532,16 @@
 	
 	            return _react2["default"].createElement(
 	                "a",
-	                { href: info.url, className: "list-group-item", target: "_blank" },
-	                _react2["default"].createElement(
-	                    "div",
-	                    { className: "history__date" },
-	                    formattedTime
-	                ),
+	                { href: info.url, className: "list-group-item history__item", target: "_blank" },
 	                _react2["default"].createElement(
 	                    "div",
 	                    { className: "history__url", style: favicon },
 	                    info.title || info.url
+	                ),
+	                _react2["default"].createElement(
+	                    "div",
+	                    { className: "history__date" },
+	                    formattedTime
 	                ),
 	                _react2["default"].createElement(
 	                    "div",
