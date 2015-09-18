@@ -1,11 +1,9 @@
-export function searchHistory(q = "", d = false, e = false, m = 0) {
+export function searchHistory(q = "", d = 0, e = false, m = 0) {
     let params = {
         text: q,
-        maxResults: m
+        maxResults: m,
+        startTime: d
     };
-    if (d) {
-        params["startTime"] = d;
-    }
     if (e) {
         params["endTime"] = e;
     }
