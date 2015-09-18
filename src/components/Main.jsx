@@ -55,7 +55,7 @@ const Main = React.createClass({
                             date={this.state.search.date}
                             query={this.state.search.query}
                             paginate={this.state.search.paginate} />
-                        <div className="content col-md-10 col-md-offset-2">
+                        <div className="content">
                             {results}
                         </div>
                     </div>

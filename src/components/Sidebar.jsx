@@ -1,5 +1,5 @@
 import React, {PropTypes} from "react";
-import DayPicker from "react-day-picker";
+import DatePicker from "react-date-picker";
 import Moment from "moment";
 
 import Fluxxor from "fluxxor";
@@ -12,28 +12,25 @@ const Sidebar = React.createClass({
         return {date: this.props.date};
     },
 
-    handleDayClick(e, day) {
-        const today = new Date();
-        if (day > today /*|| Moment(this.state.date).isSame(day, "day")*/) {
-            return;
-        }
+    handleDateChange(s, m) {
         const flux = this.getFlux();
-        this.setState({date: day});
-        flux.actions.search.changeDate(day);
+        const date = m.toDate();
+        this.setState({date: date});
+        flux.actions.search.changeDate(date);
         flux.actions.search.changePaginate(0, this.props.paginate.limit);
-        flux.actions.history.load(day, this.props.query);
+        flux.actions.history.load(date, this.props.query);
     },
 
     render() {
-        const modifiers = {
-          "selected": (day) => Moment(this.state.date).isSame(day, "day")
-        };
-
         return (
-            <div className="sidebar col-md-2">
-                <DayPicker
-                    modifiers={modifiers}
-                    onDayClick={this.handleDayClick} />
+            <div className="sidebar">
+                <div className="datepicker">
+                    <DatePicker
+                        onChange={this.handleDateChange}
+                        date={this.state.date}
+                        maxDate={Moment()}
+                        monthFormat="MMM" />
+                </div>
             </div>
         );
     }

@@ -20549,7 +20549,7 @@
 	                        paginate: this.state.search.paginate }),
 	                    _react2["default"].createElement(
 	                        "div",
-	                        { className: "content col-md-10 col-md-offset-2" },
+	                        { className: "content" },
 	                        results
 	                    )
 	                )
@@ -25188,9 +25188,9 @@
 	
 	var _react2 = _interopRequireDefault(_react);
 	
-	var _reactDayPicker = __webpack_require__(257);
+	var _reactDatePicker = __webpack_require__(361);
 	
-	var _reactDayPicker2 = _interopRequireDefault(_reactDayPicker);
+	var _reactDatePicker2 = _interopRequireDefault(_reactDatePicker);
 	
 	var _moment = __webpack_require__(259);
 	
@@ -25211,33 +25211,28 @@
 	        return { date: this.props.date };
 	    },
 	
-	    handleDayClick: function handleDayClick(e, day) {
-	        var today = new Date();
-	        if (day > today /*|| Moment(this.state.date).isSame(day, "day")*/) {
-	                return;
-	            }
+	    handleDateChange: function handleDateChange(s, m) {
 	        var flux = this.getFlux();
-	        this.setState({ date: day });
-	        flux.actions.search.changeDate(day);
+	        var date = m.toDate();
+	        this.setState({ date: date });
+	        flux.actions.search.changeDate(date);
 	        flux.actions.search.changePaginate(0, this.props.paginate.limit);
-	        flux.actions.history.load(day, this.props.query);
+	        flux.actions.history.load(date, this.props.query);
 	    },
 	
 	    render: function render() {
-	        var _this = this;
-	
-	        var modifiers = {
-	            "selected": function selected(day) {
-	                return (0, _moment2["default"])(_this.state.date).isSame(day, "day");
-	            }
-	        };
-	
 	        return _react2["default"].createElement(
 	            "div",
-	            { className: "sidebar col-md-2" },
-	            _react2["default"].createElement(_reactDayPicker2["default"], {
-	                modifiers: modifiers,
-	                onDayClick: this.handleDayClick })
+	            { className: "sidebar" },
+	            _react2["default"].createElement(
+	                "div",
+	                { className: "datepicker" },
+	                _react2["default"].createElement(_reactDatePicker2["default"], {
+	                    onChange: this.handleDateChange,
+	                    date: this.state.date,
+	                    maxDate: (0, _moment2["default"])(),
+	                    monthFormat: "MMM" })
+	            )
 	        );
 	    }
 	});
@@ -25246,689 +25241,8 @@
 	module.exports = exports["default"];
 
 /***/ },
-/* 257 */
-/***/ function(module, exports, __webpack_require__) {
-
-	"use strict";
-	
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-	
-	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
-	
-	var _get = function get(_x, _x2, _x3) { var _again = true; _function: while (_again) { var object = _x, property = _x2, receiver = _x3; desc = parent = getter = undefined; _again = false; if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { _x = parent; _x2 = property; _x3 = receiver; _again = true; continue _function; } } else if ("value" in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } } };
-	
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
-	
-	function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) arr2[i] = arr[i]; return arr2; } else { return Array.from(arr); } }
-	
-	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-	
-	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-	
-	var _react = __webpack_require__(1);
-	
-	var _react2 = _interopRequireDefault(_react);
-	
-	var _Utils = __webpack_require__(258);
-	
-	var _Utils2 = _interopRequireDefault(_Utils);
-	
-	var keys = {
-	  LEFT: 37,
-	  RIGHT: 39,
-	  ENTER: 13,
-	  SPACE: 32
-	};
-	
-	var DayPicker = (function (_Component) {
-	  _inherits(DayPicker, _Component);
-	
-	  _createClass(DayPicker, null, [{
-	    key: "propTypes",
-	    value: {
-	
-	      className: _react.PropTypes.string,
-	      style: _react.PropTypes.object,
-	      tabIndex: _react.PropTypes.number,
-	
-	      initialMonth: _react.PropTypes.instanceOf(Date),
-	      numberOfMonths: _react.PropTypes.number,
-	
-	      modifiers: _react.PropTypes.object,
-	
-	      locale: _react.PropTypes.string,
-	      localeUtils: _react.PropTypes.shape({
-	        formatMonthTitle: _react.PropTypes.func.isRequired,
-	        formatWeekdayShort: _react.PropTypes.func.isRequired,
-	        formatWeekdayLong: _react.PropTypes.func.isRequired,
-	        getFirstDayOfWeek: _react.PropTypes.func.isRequired
-	      }),
-	
-	      enableOutsideDays: _react.PropTypes.bool,
-	      canChangeMonth: _react.PropTypes.bool,
-	
-	      onDayClick: _react.PropTypes.func,
-	      onDayTouchTap: _react.PropTypes.func,
-	      onDayMouseEnter: _react.PropTypes.func,
-	      onDayMouseLeave: _react.PropTypes.func,
-	      onMonthChange: _react.PropTypes.func,
-	      onCaptionClick: _react.PropTypes.func,
-	
-	      renderDay: _react.PropTypes.func
-	
-	    },
-	    enumerable: true
-	  }, {
-	    key: "defaultProps",
-	    value: {
-	      tabIndex: 0,
-	      initialMonth: new Date(),
-	      numberOfMonths: 1,
-	      locale: "en",
-	      localeUtils: _Utils2["default"],
-	      enableOutsideDays: false,
-	      canChangeMonth: true,
-	      renderDay: function renderDay(day) {
-	        return day.getDate();
-	      }
-	    },
-	    enumerable: true
-	  }]);
-	
-	  function DayPicker(props) {
-	    _classCallCheck(this, DayPicker);
-	
-	    _get(Object.getPrototypeOf(DayPicker.prototype), "constructor", this).call(this, props);
-	    this.state = {
-	      currentMonth: _Utils2["default"].startOfMonth(props.initialMonth)
-	    };
-	  }
-	
-	  _createClass(DayPicker, [{
-	    key: "componentWillReceiveProps",
-	    value: function componentWillReceiveProps(nextProps) {
-	      if (this.props.initialMonth !== nextProps.initialMonth) {
-	        this.setState({
-	          currentMonth: _Utils2["default"].startOfMonth(nextProps.initialMonth)
-	        });
-	      }
-	    }
-	  }, {
-	    key: "showMonth",
-	    value: function showMonth(d) {
-	      this.setState({
-	        currentMonth: _Utils2["default"].startOfMonth(d)
-	      });
-	    }
-	  }, {
-	    key: "showNextMonth",
-	    value: function showNextMonth(callback) {
-	      var _this = this;
-	
-	      var currentMonth = this.state.currentMonth;
-	
-	      var nextMonth = _Utils2["default"].addMonths(currentMonth, 1);
-	      this.setState({
-	        currentMonth: nextMonth
-	      }, function () {
-	        if (callback) {
-	          callback();
-	        }
-	        if (_this.props.onMonthChange) {
-	          _this.props.onMonthChange(_this.state.currentMonth);
-	        }
-	      });
-	    }
-	  }, {
-	    key: "showPreviousMonth",
-	    value: function showPreviousMonth(callback) {
-	      var _this2 = this;
-	
-	      var currentMonth = this.state.currentMonth;
-	
-	      var prevMonth = _Utils2["default"].addMonths(currentMonth, -1);
-	      this.setState({
-	        currentMonth: prevMonth
-	      }, function () {
-	        if (callback) {
-	          callback();
-	        }
-	        if (_this2.props.onMonthChange) {
-	          _this2.props.onMonthChange(_this2.state.currentMonth);
-	        }
-	      });
-	    }
-	
-	    // Show the month(s) belonging to an outside day, counting the
-	    // number of months actually shown in the calendar.
-	  }, {
-	    key: "showMonthsForOutsideDay",
-	    value: function showMonthsForOutsideDay(day) {
-	      var currentMonth = this.state.currentMonth;
-	      var numberOfMonths = this.props.numberOfMonths;
-	
-	      var diffInMonths = _Utils2["default"].getMonthsDiff(currentMonth, day);
-	      if (diffInMonths > 0 && diffInMonths >= numberOfMonths) {
-	        var nextMonth = _Utils2["default"].addMonths(currentMonth, numberOfMonths);
-	        this.setState({
-	          currentMonth: nextMonth
-	        });
-	      } else if (diffInMonths < 0) {
-	        var prevMonth = _Utils2["default"].addMonths(currentMonth, -numberOfMonths);
-	        this.setState({
-	          currentMonth: prevMonth
-	        });
-	      }
-	    }
-	  }, {
-	    key: "focusPreviousDay",
-	    value: function focusPreviousDay(dayNode) {
-	      var body = dayNode.parentNode.parentNode.parentNode.parentNode;
-	      var dayNodes = body.querySelectorAll(".DayPicker-Day:not(.DayPicker-Day--outside)");
-	      var nodeIndex = undefined;
-	      for (var i = 0; i < dayNodes.length; i++) {
-	        if (dayNodes[i] === dayNode) {
-	          nodeIndex = i;
-	          break;
-	        }
-	      }
-	      if (nodeIndex === 0) {
-	        var currentMonth = this.state.currentMonth;
-	        var numberOfMonths = this.props.numberOfMonths;
-	
-	        var prevMonth = _Utils2["default"].addMonths(currentMonth, -numberOfMonths);
-	        this.setState({
-	          currentMonth: prevMonth
-	        }, function () {
-	          dayNodes = body.querySelectorAll(".DayPicker-Day:not(.DayPicker-Day--outside)");
-	          dayNodes[dayNodes.length - 1].focus();
-	        });
-	      } else {
-	        dayNodes[nodeIndex - 1].focus();
-	      }
-	    }
-	  }, {
-	    key: "focusNextDay",
-	    value: function focusNextDay(dayNode) {
-	      var body = dayNode.parentNode.parentNode.parentNode.parentNode;
-	      var dayNodes = body.querySelectorAll(".DayPicker-Day:not(.DayPicker-Day--outside)");
-	      var nodeIndex = undefined;
-	      for (var i = 0; i < dayNodes.length; i++) {
-	        if (dayNodes[i] === dayNode) {
-	          nodeIndex = i;
-	          break;
-	        }
-	      }
-	
-	      if (nodeIndex === dayNodes.length - 1) {
-	        var currentMonth = this.state.currentMonth;
-	        var numberOfMonths = this.props.numberOfMonths;
-	
-	        var nextMonth = _Utils2["default"].addMonths(currentMonth, numberOfMonths);
-	        this.setState({
-	          currentMonth: nextMonth
-	        }, function () {
-	          dayNodes = body.querySelectorAll(".DayPicker-Day:not(.DayPicker-Day--outside)");
-	          dayNodes[0].focus();
-	        });
-	      } else {
-	        dayNodes[nodeIndex + 1].focus();
-	      }
-	    }
-	
-	    // Event handlers
-	
-	  }, {
-	    key: "handleKeyDown",
-	    value: function handleKeyDown(e) {
-	      switch (e.keyCode) {
-	        case keys.LEFT:
-	          this.showPreviousMonth();
-	          break;
-	        case keys.RIGHT:
-	          this.showNextMonth();
-	          break;
-	      }
-	    }
-	  }, {
-	    key: "handleDayKeyDown",
-	    value: function handleDayKeyDown(e, day, modifiers) {
-	      e.persist();
-	      switch (e.keyCode) {
-	        case keys.LEFT:
-	          e.preventDefault();
-	          e.stopPropagation();
-	          this.focusPreviousDay(e.target);
-	          break;
-	        case keys.RIGHT:
-	          e.preventDefault();
-	          e.stopPropagation();
-	          this.focusNextDay(e.target);
-	          break;
-	        case keys.ENTER:
-	        case keys.SPACE:
-	          e.preventDefault();
-	          e.stopPropagation();
-	          if (this.props.onDayClick) {
-	            this.handleDayClick(e, day, modifiers);
-	          }
-	          if (this.props.onDayTouchTap) {
-	            this.handleDayTouchTap(e, day, modifiers);
-	          }
-	          break;
-	      }
-	    }
-	  }, {
-	    key: "handleNextMonthClick",
-	    value: function handleNextMonthClick(e) {
-	      e.stopPropagation();
-	      this.showNextMonth();
-	    }
-	  }, {
-	    key: "handlePrevMonthClick",
-	    value: function handlePrevMonthClick(e) {
-	      e.stopPropagation();
-	      this.showPreviousMonth();
-	    }
-	  }, {
-	    key: "handleCaptionClick",
-	    value: function handleCaptionClick(e, currentMonth) {
-	      e.persist();
-	      this.props.onCaptionClick(e, currentMonth);
-	    }
-	  }, {
-	    key: "handleDayTouchTap",
-	    value: function handleDayTouchTap(e, day, modifiers) {
-	      e.persist();
-	      if (modifiers.indexOf("outside") > -1) {
-	        this.showMonthsForOutsideDay(day);
-	      }
-	      this.props.onDayTouchTap(e, day, modifiers);
-	    }
-	  }, {
-	    key: "handleDayClick",
-	    value: function handleDayClick(e, day, modifiers) {
-	      e.persist();
-	      if (modifiers.indexOf("outside") > -1) {
-	        this.showMonthsForOutsideDay(day);
-	      }
-	
-	      this.props.onDayClick(e, day, modifiers);
-	    }
-	  }, {
-	    key: "handleDayMouseEnter",
-	    value: function handleDayMouseEnter(e, day, modifiers) {
-	      e.persist();
-	      this.props.onDayMouseEnter(e, day, modifiers);
-	    }
-	  }, {
-	    key: "handleDayMouseLeave",
-	    value: function handleDayMouseLeave(e, day, modifiers) {
-	      e.persist();
-	      this.props.onDayMouseLeave(e, day, modifiers);
-	    }
-	  }, {
-	    key: "renderNavBar",
-	    value: function renderNavBar() {
-	      var baseClass = "DayPicker-NavButton DayPicker-NavButton";
-	      return _react2["default"].createElement(
-	        "div",
-	        { className: "DayPicker-NavBar" },
-	        _react2["default"].createElement("span", {
-	          key: "prev",
-	          className: baseClass + "--prev",
-	          onClick: this.handlePrevMonthClick.bind(this) }),
-	        _react2["default"].createElement("span", {
-	          key: "next",
-	          className: baseClass + "--next",
-	          onClick: this.handleNextMonthClick.bind(this) })
-	      );
-	    }
-	  }, {
-	    key: "renderMonth",
-	    value: function renderMonth(d, i) {
-	      var _this3 = this;
-	
-	      var _props = this.props;
-	      var locale = _props.locale;
-	      var localeUtils = _props.localeUtils;
-	      var onCaptionClick = _props.onCaptionClick;
-	      var currentMonth = this.state.currentMonth;
-	
-	      return _react2["default"].createElement(
-	        "div",
-	        {
-	          className: "DayPicker-Month",
-	          key: i },
-	        _react2["default"].createElement(
-	          "div",
-	          { className: "DayPicker-Caption", onClick: onCaptionClick ? function (e) {
-	              return _this3.handleCaptionClick(e, currentMonth);
-	            } : null },
-	          localeUtils.formatMonthTitle(d, locale)
-	        ),
-	        _react2["default"].createElement(
-	          "div",
-	          { className: "DayPicker-Weekdays" },
-	          this.renderWeekDays()
-	        ),
-	        _react2["default"].createElement(
-	          "div",
-	          { className: "DayPicker-Body" },
-	          this.renderWeeksInMonth(d)
-	        )
-	      );
-	    }
-	  }, {
-	    key: "renderWeekDays",
-	    value: function renderWeekDays() {
-	      var _props2 = this.props;
-	      var locale = _props2.locale;
-	      var localeUtils = _props2.localeUtils;
-	
-	      var days = [];
-	      for (var i = 0; i < 7; i++) {
-	        days.push(_react2["default"].createElement(
-	          "div",
-	          { key: i, className: "DayPicker-Weekday" },
-	          _react2["default"].createElement(
-	            "attr",
-	            { title: localeUtils.formatWeekdayLong(i, locale) },
-	            localeUtils.formatWeekdayShort(i, locale)
-	          )
-	        ));
-	      }
-	      return _react2["default"].createElement(
-	        "div",
-	        null,
-	        days
-	      );
-	    }
-	  }, {
-	    key: "renderWeeksInMonth",
-	    value: function renderWeeksInMonth(month) {
-	      var _this4 = this;
-	
-	      var _props3 = this.props;
-	      var locale = _props3.locale;
-	      var localeUtils = _props3.localeUtils;
-	
-	      var firstDayOfWeek = localeUtils.getFirstDayOfWeek(locale);
-	      return _Utils2["default"].getWeekArray(month, firstDayOfWeek).map(function (week, i) {
-	        return _react2["default"].createElement(
-	          "div",
-	          { key: i, className: "DayPicker-Week", role: "row" },
-	          week.map(function (day) {
-	            return _this4.renderDay(month, day);
-	          })
-	        );
-	      });
-	    }
-	  }, {
-	    key: "renderDay",
-	    value: function renderDay(month, day) {
-	      var _this5 = this;
-	
-	      var renderDay = this.props.renderDay;
-	      var _props4 = this.props;
-	      var enableOutsideDays = _props4.enableOutsideDays;
-	      var modifierFunctions = _props4.modifiers;
-	
-	      var className = "DayPicker-Day";
-	      var modifiers = [];
-	      var key = "" + day.getFullYear() + day.getMonth() + day.getDate();
-	
-	      var isToday = _Utils2["default"].isSameDay(day, new Date());
-	      if (isToday) {
-	        modifiers.push("today");
-	      }
-	
-	      var isOutside = _Utils2["default"].isDayOutsideMonth(day, month);
-	      if (isOutside) {
-	        modifiers.push("outside");
-	      }
-	
-	      if (modifierFunctions) {
-	        var customModifiers = _Utils2["default"].getModifiersForDay(day, modifierFunctions);
-	        modifiers = [].concat(_toConsumableArray(modifiers), _toConsumableArray(customModifiers));
-	      }
-	
-	      className += modifiers.map(function (modifier) {
-	        return " " + className + "--" + modifier;
-	      }).join("");
-	
-	      if (isOutside && !enableOutsideDays) {
-	        return _react2["default"].createElement("div", { key: "outside-" + key, className: className });
-	      }
-	
-	      var _props5 = this.props;
-	      var onDayMouseEnter = _props5.onDayMouseEnter;
-	      var onDayMouseLeave = _props5.onDayMouseLeave;
-	      var onDayTouchTap = _props5.onDayTouchTap;
-	      var onDayClick = _props5.onDayClick;
-	
-	      var tabIndex = null;
-	      if ((onDayTouchTap || onDayClick) && !isOutside) {
-	        tabIndex = -1;
-	        // Focus on the first day of the month
-	        if (day.getDate() === 1) {
-	          tabIndex = this.props.tabIndex;
-	        }
-	      }
-	      return _react2["default"].createElement(
-	        "div",
-	        { key: key, className: className,
-	          tabIndex: tabIndex,
-	          role: "gridcell",
-	          onKeyDown: function (e) {
-	            return _this5.handleDayKeyDown(e, day, modifiers);
-	          },
-	          onMouseEnter: onDayMouseEnter ? function (e) {
-	            return _this5.handleDayMouseEnter(e, day, modifiers);
-	          } : null,
-	          onMouseLeave: onDayMouseLeave ? function (e) {
-	            return _this5.handleDayMouseLeave(e, day, modifiers);
-	          } : null,
-	          onClick: onDayClick ? function (e) {
-	            return _this5.handleDayClick(e, day, modifiers);
-	          } : null,
-	          onTouchTap: onDayTouchTap ? function (e) {
-	            return _this5.handleDayTouchTap(e, day, modifiers);
-	          } : null
-	        },
-	        renderDay(day)
-	      );
-	    }
-	  }, {
-	    key: "render",
-	    value: function render() {
-	      var _props6 = this.props;
-	      var numberOfMonths = _props6.numberOfMonths;
-	      var locale = _props6.locale;
-	      var style = _props6.style;
-	      var tabIndex = _props6.tabIndex;
-	      var canChangeMonth = _props6.canChangeMonth;
-	      var currentMonth = this.state.currentMonth;
-	
-	      var className = "DayPicker DayPicker--" + locale;
-	
-	      if (!this.props.onDayClick && !this.props.onDayTouchTap) {
-	        className = className + " DayPicker--interactionDisabled";
-	      }
-	      if (this.props.className) {
-	        className = className + " " + this.props.className;
-	      }
-	
-	      var months = [];
-	      var month = undefined;
-	      for (var i = 0; i < numberOfMonths; i++) {
-	        month = _Utils2["default"].addMonths(currentMonth, i);
-	        months.push(this.renderMonth(month, i));
-	      }
-	
-	      return _react2["default"].createElement(
-	        "div",
-	        { className: className,
-	          style: style,
-	          role: "widget",
-	          tabIndex: canChangeMonth && tabIndex,
-	          onKeyDown: canChangeMonth && this.handleKeyDown.bind(this) },
-	        canChangeMonth && this.renderNavBar(),
-	        months
-	      );
-	    }
-	  }]);
-	
-	  return DayPicker;
-	})(_react.Component);
-	
-	exports["default"] = DayPicker;
-	module.exports = exports["default"];
-	//# sourceMappingURL=DayPicker.js.map
-
-/***/ },
-/* 258 */
-/***/ function(module, exports) {
-
-	"use strict";
-	
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-	var WEEKDAYS_LONG = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
-	
-	var WEEKDAYS_SHORT = ["Su", "Mo", "Tu", "We", "Th", "Fr", "Sa"];
-	
-	var MONTHS = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
-	
-	var Utils = {
-	
-	  addMonths: function addMonths(d, months) {
-	    var newDate = this.clone(d);
-	    newDate.setMonth(d.getMonth() + months);
-	    return newDate;
-	  },
-	
-	  clone: function clone(d) {
-	    return new Date(d.getTime());
-	  },
-	
-	  startOfMonth: function startOfMonth(d) {
-	    var newDate = this.clone(d);
-	    newDate.setDate(1);
-	    newDate.setHours(0);
-	    newDate.setMinutes(0);
-	    newDate.setSeconds(0);
-	    newDate.setMilliseconds(0);
-	    return newDate;
-	  },
-	
-	  getFirstDayOfMonth: function getFirstDayOfMonth(d) {
-	    return new Date(d.getFullYear(), d.getMonth(), 1);
-	  },
-	
-	  getDaysInMonth: function getDaysInMonth(d) {
-	    var resultDate = this.getFirstDayOfMonth(d);
-	
-	    resultDate.setMonth(resultDate.getMonth() + 1);
-	    resultDate.setDate(resultDate.getDate() - 1);
-	
-	    return resultDate.getDate();
-	  },
-	
-	  getWeekArray: function getWeekArray(d, firstDayOfWeek) {
-	    var daysInMonth = this.getDaysInMonth(d);
-	    if (arguments.length === 1) {
-	      firstDayOfWeek = this.getFirstDayOfWeek();
-	    }
-	    var dayArray = [];
-	    var week = [];
-	    var weekArray = [];
-	
-	    for (var i = 1; i <= daysInMonth; i++) {
-	      dayArray.push(new Date(d.getFullYear(), d.getMonth(), i));
-	    }
-	
-	    dayArray.forEach(function (day) {
-	      if (week.length > 0 && day.getDay() === firstDayOfWeek) {
-	        weekArray.push(week);
-	        week = [];
-	      }
-	      week.push(day);
-	      if (dayArray.indexOf(day) === dayArray.length - 1) {
-	        weekArray.push(week);
-	      }
-	    });
-	
-	    // unshift days to start the first week
-	    var firstWeek = weekArray[0];
-	    for (var i = 7 - firstWeek.length; i > 0; i--) {
-	      var outsideDate = this.clone(firstWeek[0]);
-	      outsideDate.setDate(firstWeek[0].getDate() - 1);
-	      firstWeek.unshift(outsideDate);
-	    }
-	
-	    // push days until the end of the last week
-	    var lastWeek = weekArray[weekArray.length - 1];
-	    for (var i = lastWeek.length; i < 7; i++) {
-	      var outsideDate = this.clone(lastWeek[lastWeek.length - 1]);
-	      outsideDate.setDate(lastWeek[lastWeek.length - 1].getDate() + 1);
-	      lastWeek.push(outsideDate);
-	    }
-	
-	    return weekArray;
-	  },
-	
-	  getModifiersForDay: function getModifiersForDay(d, modifierFunctions) {
-	    var modifiers = [];
-	    if (modifierFunctions) {
-	      for (var modifier in modifierFunctions) {
-	        var func = modifierFunctions[modifier];
-	        if (func(d)) {
-	          modifiers.push(modifier);
-	        }
-	      }
-	    }
-	    return modifiers;
-	  },
-	
-	  isDayOutsideMonth: function isDayOutsideMonth(d1, d2) {
-	    return d1.getMonth() !== d2.getMonth();
-	  },
-	
-	  isSameDay: function isSameDay(d1, d2) {
-	    return d1.getDate() === d2.getDate() && d1.getMonth() === d2.getMonth() && d1.getFullYear() === d2.getFullYear();
-	  },
-	
-	  formatMonthTitle: function formatMonthTitle(d) {
-	    return MONTHS[d.getMonth()] + " " + d.getFullYear();
-	  },
-	
-	  formatWeekdayShort: function formatWeekdayShort(i) {
-	    return WEEKDAYS_SHORT[i];
-	  },
-	
-	  formatWeekdayLong: function formatWeekdayLong(i) {
-	    return WEEKDAYS_LONG[i];
-	  },
-	
-	  getFirstDayOfWeek: function getFirstDayOfWeek() {
-	    return 0;
-	  },
-	
-	  getMonthsDiff: function getMonthsDiff(d1, d2) {
-	    return d2.getMonth() - d1.getMonth() + 12 * (d2.getFullYear() - d1.getFullYear());
-	  }
-	
-	};
-	
-	exports["default"] = Utils;
-	module.exports = exports["default"];
-	//# sourceMappingURL=Utils.js.map
-
-/***/ },
+/* 257 */,
+/* 258 */,
 /* 259 */
 /***/ function(module, exports, __webpack_require__) {
 
@@ -38072,6 +37386,1492 @@
 	
 	exports["default"] = Paginator;
 	module.exports = exports["default"];
+
+/***/ },
+/* 361 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+	
+	var React = __webpack_require__(1);
+	
+	var moment = __webpack_require__(259);
+	var assign = __webpack_require__(362);
+	var asConfig = __webpack_require__(363);
+	
+	var MonthView = __webpack_require__(366);
+	var YearView = __webpack_require__(370);
+	var DecadeView = __webpack_require__(371);
+	var Header = __webpack_require__(372);
+	
+	var toMoment = __webpack_require__(368);
+	
+	var hasOwn = function hasOwn(obj, key) {
+	    return Object.prototype.hasOwnProperty.call(obj, key);
+	};
+	
+	var onEnter = __webpack_require__(369);
+	
+	var Views = {
+	    month: MonthView,
+	    year: YearView,
+	    decade: DecadeView
+	};
+	
+	function emptyFn() {}
+	
+	var DatePicker = React.createClass({
+	
+	    displayName: 'DatePicker',
+	
+	    propTypes: {
+	        todayText: React.PropTypes.string,
+	        gotoSelectedText: React.PropTypes.string,
+	
+	        renderFooter: React.PropTypes.func,
+	        onChange: React.PropTypes.func,
+	
+	        date: React.PropTypes.any,
+	        viewDate: React.PropTypes.any
+	    },
+	
+	    getViewOrder: function getViewOrder() {
+	        return this.props.viewOrder || ['month', 'year', 'decade'];
+	    },
+	
+	    getDefaultProps: function getDefaultProps() {
+	        var props = assign({}, asConfig(), {
+	            navOnDateClick: true,
+	            defaultStyle: {
+	                boxSizing: 'border-box'
+	            }
+	        });
+	
+	        delete props.viewDate;
+	        delete props.date;
+	
+	        return props;
+	    },
+	
+	    getInitialState: function getInitialState() {
+	        return {
+	            view: this.props.defaultView,
+	            viewDate: this.props.defaultViewDate,
+	            defaultDate: this.props.defaultDate
+	        };
+	    },
+	
+	    getViewName: function getViewName() {
+	        var view = this.props.view != null ? this.props.view : this.state.view;
+	
+	        return view || 'month';
+	    },
+	
+	    addViewIndex: function addViewIndex(amount) {
+	        var viewName = this.getViewName();
+	
+	        var order = this.getViewOrder();
+	        var index = order.indexOf(viewName);
+	
+	        index += amount;
+	
+	        return index % order.length;
+	    },
+	
+	    getNextViewName: function getNextViewName() {
+	        return this.getViewOrder()[this.addViewIndex(1)];
+	    },
+	
+	    getPrevViewName: function getPrevViewName() {
+	        return this.getViewOrder()[this.addViewIndex(-1)];
+	    },
+	
+	    getView: function getView() {
+	        var views = this.props.views || Views;
+	        return views[this.getViewName()] || views.month;
+	    },
+	
+	    getViewFactory: function getViewFactory() {
+	        var view = this.getView();
+	
+	        if (React.createFactory && view && view.prototype && typeof view.prototype.render == 'function') {
+	            view.__factory = view.__factory || React.createFactory(view);
+	            view = view.__factory;
+	        }
+	
+	        return view;
+	    },
+	
+	    getViewDate: function getViewDate() {
+	        var date = hasOwn(this.props, 'viewDate') ? this.props.viewDate : this.state.viewDate;
+	
+	        date = date || this.viewMoment || this.getDate() || new Date();
+	
+	        if (moment.isMoment(date)) {
+	            //in order to strip the locale - the date picker may have had its locale changed
+	            //between two render calls. If we don't strip this, moment(mom) returns a new moment
+	            //with the locale of mom, which is not what we want
+	            date = +date;
+	        }
+	
+	        date = this.toMoment(date);
+	
+	        return date;
+	    },
+	
+	    getDate: function getDate() {
+	        var date;
+	
+	        if (hasOwn(this.props, 'date')) {
+	            date = this.props.date;
+	        } else {
+	            date = this.state.defaultDate;
+	        }
+	
+	        return date ? this.toMoment(date) : null;
+	    },
+	
+	    render: function render() {
+	
+	        var props = assign({}, this.props);
+	
+	        this.toMoment = function (value, dateFormat) {
+	            return toMoment(value, dateFormat || props.dateFormat, { locale: props.locale });
+	        };
+	
+	        var view = this.getViewFactory();
+	
+	        props.date = this.getDate();
+	
+	        var dateString = props.date == null ? '' : props.date.format(this.props.dateFormat);
+	
+	        props.viewDate = this.viewMoment = this.getViewDate();
+	        props.locale = this.props.locale;
+	        props.localeData = moment.localeData(props.locale);
+	
+	        props.renderDay = this.props.renderDay;
+	        props.onRenderDay = this.props.onRenderDay;
+	
+	        // props.onChange  = this.handleChange
+	        // props.onSelect  = this.handleSelect
+	
+	        var className = (this.props.className || '') + ' date-picker';
+	
+	        props.style = this.prepareStyle(props);
+	
+	        var viewProps = props;
+	        var viewProps = asConfig(props);
+	
+	        viewProps.dateString = dateString;
+	        viewProps.localeData = props.localeData;
+	        viewProps.onSelect = this.handleSelect;
+	        viewProps.onChange = this.handleChange;
+	
+	        return React.createElement(
+	            'div',
+	            _extends({ className: className, style: props.style }, this.props),
+	            this.renderHeader(view, props),
+	            React.createElement(
+	                'div',
+	                { className: 'dp-body', style: { flex: 1 } },
+	                view(viewProps)
+	            ),
+	            this.renderFooter(props)
+	        );
+	    },
+	
+	    prepareStyle: function prepareStyle(props) {
+	        var style = assign({}, props.defaultStyle, props.style);
+	
+	        return style;
+	    },
+	
+	    renderFooter: function renderFooter(props) {
+	        if (this.props.hideFooter) {
+	            return;
+	        }
+	
+	        if (this.props.today) {
+	            console.warn('Please use "todayText" prop instead of "today"!');
+	        }
+	        if (this.props.gotoSelected) {
+	            console.warn('Please use "gotoSelectedText" prop instead of "gotoSelected"!');
+	        }
+	
+	        var todayText = this.props.todayText || 'Today';
+	        var gotoSelectedText = this.props.gotoSelectedText || 'Go to selected';
+	
+	        var footerProps = {
+	            todayText: todayText,
+	            gotoSelectedText: gotoSelectedText,
+	            gotoToday: this.gotoNow,
+	            gotoSelected: this.gotoSelected.bind(this, props),
+	            date: props.date,
+	            viewDate: props.viewDate
+	        };
+	
+	        var result;
+	        if (typeof this.props.footerFactory == 'function') {
+	            result = this.props.footerFactory(footerProps);
+	        }
+	
+	        if (result !== undefined) {
+	            return result;
+	        }
+	
+	        return React.createElement(
+	            'div',
+	            { className: 'dp-footer' },
+	            React.createElement(
+	                'div',
+	                {
+	                    tabIndex: '1',
+	                    role: 'link',
+	                    className: 'dp-footer-today',
+	                    onClick: footerProps.gotoToday,
+	                    onKeyUp: onEnter(footerProps.gotoToday)
+	                },
+	                todayText
+	            ),
+	            React.createElement(
+	                'div',
+	                {
+	                    tabIndex: '1',
+	                    role: 'link',
+	                    className: 'dp-footer-selected',
+	                    onClick: footerProps.gotoSelected,
+	                    onKeyUp: onEnter(footerProps.gotoSelected)
+	                },
+	                gotoSelectedText
+	            )
+	        );
+	    },
+	
+	    gotoNow: function gotoNow() {
+	        this.gotoDate(+new Date());
+	    },
+	
+	    gotoSelected: function gotoSelected(props) {
+	        this.gotoDate(props.date || +new Date());
+	    },
+	
+	    gotoDate: function gotoDate(value) {
+	
+	        this.setView('month');
+	
+	        this.setViewDate(value);
+	    },
+	
+	    getViewColspan: function getViewColspan() {
+	        var map = {
+	            month: 5,
+	            year: 2,
+	            decade: 2
+	        };
+	
+	        return map[this.getViewName()];
+	    },
+	
+	    renderHeader: function renderHeader(view, props) {
+	
+	        if (this.props.hideHeader) {
+	            return;
+	        }
+	
+	        props = props || this.props;
+	
+	        var viewDate = this.getViewDate();
+	        var headerText = this.getView().getHeaderText(viewDate, props);
+	
+	        var colspan = this.getViewColspan();
+	        var prev = this.props.navPrev;
+	        var next = this.props.navNext;
+	
+	        return React.createElement(
+	            Header,
+	            {
+	                prevText: prev,
+	                nextText: next,
+	                colspan: colspan,
+	                onPrev: this.handleNavPrev,
+	                onNext: this.handleNavNext,
+	                onChange: this.handleViewChange
+	            },
+	            headerText
+	        );
+	    },
+	
+	    handleRenderDay: function handleRenderDay(date) {
+	        return (this.props.renderDay || emptyFn)(date) || [];
+	    },
+	
+	    handleViewChange: function handleViewChange() {
+	        this.setView(this.getNextViewName());
+	    },
+	
+	    /**
+	     * Use this method to set the view.
+	     *
+	     * @param {String} view 'month'/'year'/'decade'
+	     *
+	     * It calls onViewChange, and if the view is uncontrolled, also sets it is state,
+	     * so the datepicker gets re-rendered view the new view
+	     *
+	     */
+	    setView: function setView(view) {
+	
+	        if (typeof this.props.onViewChange == 'function') {
+	            this.props.onViewChange(view);
+	        }
+	
+	        if (this.props.view == null) {
+	            this.setState({
+	                view: view
+	            });
+	        }
+	    },
+	
+	    setViewDate: function setViewDate(moment) {
+	
+	        moment = this.toMoment(moment);
+	
+	        var fn = this.props.onViewDateChange;
+	
+	        if (typeof fn == 'function') {
+	
+	            var text = moment.format(this.props.dateFormat);
+	            var view = this.getViewName();
+	
+	            fn(text, moment, view);
+	        }
+	
+	        if (!hasOwn(this.props, 'viewDate')) {
+	            this.setState({
+	                viewDate: moment
+	            });
+	        }
+	    },
+	
+	    getNext: function getNext() {
+	        var current = this.getViewDate();
+	        var toMoment = this.toMoment;
+	
+	        return ({
+	            month: function month() {
+	                return toMoment(current).add(1, 'month');
+	            },
+	            year: function year() {
+	                return toMoment(current).add(1, 'year');
+	            },
+	            decade: function decade() {
+	                return toMoment(current).add(10, 'year');
+	            }
+	        })[this.getViewName()]();
+	    },
+	
+	    getPrev: function getPrev() {
+	        var current = this.getViewDate();
+	        var toMoment = this.toMoment;
+	
+	        return ({
+	            month: function month() {
+	                return toMoment(current).add(-1, 'month');
+	            },
+	            year: function year() {
+	                return toMoment(current).add(-1, 'year');
+	            },
+	            decade: function decade() {
+	                return toMoment(current).add(-10, 'year');
+	            }
+	        })[this.getViewName()]();
+	    },
+	
+	    handleNavigation: function handleNavigation(direction, event) {
+	        var viewMoment = direction == -1 ? this.getPrev() : this.getNext();
+	
+	        this.setViewDate(viewMoment);
+	
+	        if (typeof this.props.onNav === 'function') {
+	            var text = viewMoment.format(this.props.dateFormat);
+	            var view = this.getViewName();
+	
+	            this.props.onNav(text, viewMoment, view, direction, event);
+	        }
+	    },
+	
+	    handleNavPrev: function handleNavPrev(event) {
+	        this.handleNavigation(-1, event);
+	    },
+	
+	    handleNavNext: function handleNavNext(event) {
+	        this.handleNavigation(1, event);
+	    },
+	
+	    handleChange: function handleChange(date, event) {
+	        date = this.toMoment(date);
+	
+	        if (this.props.navOnDateClick) {
+	            var viewDate = this.toMoment(this.getViewDate());
+	
+	            //it's not enough to compare months, since the year can change as well
+	            //
+	            //also it's ok to hardcode the format here
+	            var viewMonth = viewDate.format('YYYY-MM');
+	            var dateMonth = date.format('YYYY-MM');
+	
+	            if (dateMonth > viewMonth) {
+	                this.handleNavNext(event);
+	            } else if (dateMonth < viewMonth) {
+	                this.handleNavPrev(event);
+	            }
+	        }
+	
+	        var text = date.format(this.props.dateFormat);
+	
+	        if (!hasOwn(this.props, 'date')) {
+	            this.setState({
+	                defaultDate: text
+	            });
+	        }
+	
+	        ;(this.props.onChange || emptyFn)(text, date, event);
+	    },
+	
+	    handleSelect: function handleSelect(date, event) {
+	        var viewName = this.getViewName();
+	
+	        var property = ({
+	            decade: 'year',
+	            year: 'month'
+	        })[viewName];
+	
+	        var value = date.get(property);
+	        var viewMoment = this.toMoment(this.getViewDate()).set(property, value);
+	        var view = this.getPrevViewName();
+	
+	        this.setViewDate(viewMoment);
+	
+	        this.setView(view);
+	
+	        if (typeof this.props.onSelect === 'function') {
+	            var text = viewMoment.format(this.props.dateFormat);
+	            this.props.onSelect(text, viewMoment, view, event);
+	        }
+	    }
+	
+	});
+	
+	DatePicker.views = Views;
+	
+	var PT = React.PropTypes;
+	
+	DatePicker.propTypes = {
+	
+	    /**
+	     * Function to be called when user selects a date.
+	     *
+	     * Called with the following params:
+	     *
+	     * @param {String} dateText Date formatted as string
+	     * @param {Moment} moment Moment.js instance
+	     * @param {Event} event
+	     *
+	     * @type {Function}
+	     */
+	    onChange: PT.func,
+	
+	    /**
+	     * Function to be called when the user navigates to the next/prev month/year/decade
+	     *
+	     * Called with the following params:
+	     *
+	     * @param {String} dateText Date formatted as string
+	     * @param {Moment} moment Moment.js instance
+	     * @param {String} view The name of the current view (eg: "month")
+	     * @param {Number} direction 1 or -1. 1 if the right arrow, to nav to next period was pressed. -1 if the left arrow, to nav to the prev period was pressed.
+	     * @param {Event} event
+	     *
+	     * @type {Function}
+	     */
+	    onNav: PT.func,
+	
+	    /**
+	     * Function to be called when the user selects a year/month.
+	     *
+	     * Called with the following params:
+	     *
+	     * @param {String} dateText Date formatted as string
+	     * @param {Moment} moment Moment.js instance
+	     * @param {String} view The name of the view displayed after following the selection. For now, either "year" or "month"
+	     *
+	     * @type {Function}
+	     */
+	    onSelect: PT.func,
+	
+	    /**
+	     * A function that should return a React DOM for the day cell. The first param is the props object.
+	     * You can use this to have full control over what gets rendered for a day.
+	     *
+	     * @param {Object} dayProps The props object passed to day rendering
+	     *
+	     * @type {Function}
+	     */
+	    renderDay: PT.func,
+	
+	    /**
+	     * A function that can manipulate the props object for a day, and SHOULD return a props object (a new one, or the same).
+	     * Use this for CUSTOM DAY STYLING.
+	     * You can use this to take full control over the styles/css classes/attributes applied to the day cell in the month view.
+	     *
+	     * @param {Object} dayProps
+	     * @return {Object} dayProps
+	     *
+	     * @type {Function}
+	     */
+	    onRenderDay: PT.func,
+	
+	    /******************************************/
+	    /********** VIEW-related props ************/
+	    /******************************************/
+	
+	    /**
+	     * The default view to show in the picker. This is an uncontrolled prop.
+	     * If none specified, the default view will be "month"
+	     *
+	     * @type {String}
+	     */
+	    defaultView: PT.string,
+	
+	    /**
+	     * The view to show in the picker. This is a CONTROLLED prop!
+	     *
+	     * When using this controlled prop, make sure you update it when `onViewChange` function is called
+	     * if you want to navigate to another view, as expected.
+	     *
+	     * @type {String}
+	     */
+	    view: PT.string,
+	
+	    /**
+	     * A function to be called when navigating to another view date.
+	     *
+	     * Called with the following params:
+	     *
+	     * @param {String} dateText Date formatted as string
+	     * @param {Moment} moment Moment.js instance
+	     * @param {String} view the name of the view displayed after the navigation occurs.
+	     *
+	     * @type {Function}
+	     */
+	    onViewDateChange: PT.func,
+	
+	    /**
+	     * A function to be called when the view is changed.
+	     * If you're using the controlled `view` prop, make sure you update the `view` prop in this function if you want to navigate to another view, as expected.
+	     *
+	     * @param {String} nextView One of "month", "year", "decade"
+	     *
+	     * @type {Function}
+	     */
+	    onViewChange: PT.func,
+	
+	    /**
+	     * Defaults to true. If specified as false, will not navigate to the date that was clicked, even if that date is in the prev/next month
+	     * @type {Boolean}
+	     */
+	    navOnDateClick: PT.bool
+	};
+	
+	module.exports = DatePicker;
+
+/***/ },
+/* 362 */
+/***/ function(module, exports) {
+
+	'use strict';
+	var propIsEnumerable = Object.prototype.propertyIsEnumerable;
+	
+	function ToObject(val) {
+		if (val == null) {
+			throw new TypeError('Object.assign cannot be called with null or undefined');
+		}
+	
+		return Object(val);
+	}
+	
+	function ownEnumerableKeys(obj) {
+		var keys = Object.getOwnPropertyNames(obj);
+	
+		if (Object.getOwnPropertySymbols) {
+			keys = keys.concat(Object.getOwnPropertySymbols(obj));
+		}
+	
+		return keys.filter(function (key) {
+			return propIsEnumerable.call(obj, key);
+		});
+	}
+	
+	module.exports = Object.assign || function (target, source) {
+		var from;
+		var keys;
+		var to = ToObject(target);
+	
+		for (var s = 1; s < arguments.length; s++) {
+			from = arguments[s];
+			keys = ownEnumerableKeys(Object(from));
+	
+			for (var i = 0; i < keys.length; i++) {
+				to[keys[i]] = from[keys[i]];
+			}
+		}
+	
+		return to;
+	};
+
+
+/***/ },
+/* 363 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	var assign = __webpack_require__(362);
+	
+	var CONFIG = __webpack_require__(364);
+	var KEYS = Object.keys(CONFIG);
+	
+	function copyList(src, target, list) {
+	    if (src) {
+	        list.forEach(function (key) {
+	            target[key] = src[key];
+	        });
+	    }
+	
+	    return target;
+	}
+	
+	/**
+	 * Returns an object that copies from given source object
+	 * on the resulting object only the properties also found in cfg.
+	 *
+	 * If no cfg specified, CONFIG is assumed
+	 *
+	 * @param  {object} source
+	 * @param  {Object} [cfg] If not specied, CONFIG will be used
+	 *
+	 * @return {Object}
+	 */
+	module.exports = function asConfig(source, cfg) {
+	
+	    var keys = KEYS;
+	
+	    if (cfg) {
+	        keys = Object.keys(cfg);
+	    }
+	
+	    cfg = cfg || CONFIG;
+	
+	    if (!source) {
+	        return assign({}, cfg);
+	    }
+	
+	    return copyList(source, assign({}, cfg), keys);
+	};
+
+/***/ },
+/* 364 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	var getWeekDayNames = __webpack_require__(365);
+	
+	// console.log(getWeekDayNames())
+	
+	module.exports = {
+	
+	    //the names of week days to be displayed in month view - first should be sunday
+	    weekDayNames: getWeekDayNames,
+	
+	    //the day to display as first day of week. defaults to 0, which is sunday
+	    weekStartDay: null,
+	
+	    locale: null,
+	
+	    //the format in which days should be displayed in month view
+	    dayFormat: 'D',
+	
+	    //the format in which months should be displayed in year view
+	    monthFormat: 'MMMM',
+	
+	    //the format in which years should be displayed in decade view
+	    yearFormat: 'YYYY',
+	
+	    //text for navigating to prev period
+	    navPrev: '‹',
+	
+	    //text for navigating to next period
+	    navNext: '›',
+	
+	    //the view to render initially. Possible values are: 'month', 'year', 'decade'
+	    view: null,
+	
+	    //the date to mark as selected in the date picker.
+	    //Can be a Date object, a moment object or a string.
+	    //If it's a string, it will be parsed using dateFormat
+	    date: null,
+	
+	    minDate: null,
+	
+	    maxDate: null,
+	
+	    //the date where to open the picker. defaults to today if no date and no viewDate specified
+	    viewDate: null,
+	
+	    //if the date property is given as string, it will be parsed using this format
+	    dateFormat: 'YYYY-MM-DD',
+	
+	    onRenderDay: null,
+	    renderDay: null
+	};
+
+/***/ },
+/* 365 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	var moment = __webpack_require__(259);
+	
+	var DEFAULT_WEEK_START_DAY = moment().startOf('week').format('d') * 1;
+	
+	module.exports = function getWeekDayNames(startDay, locale) {
+	
+		var weekDays;
+	
+		if (locale) {
+			var data = moment.localeData(locale);
+	
+			weekDays = data && data._weekdaysShort ? data._weekdaysShort : weekDays;
+		}
+	
+		weekDays = (weekDays || moment.weekdaysShort()).concat();
+	
+		var names = weekDays;
+		var index = startDay == null ? DEFAULT_WEEK_START_DAY : startDay;
+	
+		while (index > 0) {
+			names.push(names.shift());
+			index--;
+		}
+	
+		return names;
+	};
+
+/***/ },
+/* 366 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, '__esModule', {
+	  value: true
+	});
+	var React = __webpack_require__(1);
+	var moment = __webpack_require__(259);
+	var assign = __webpack_require__(362);
+	
+	var FORMAT = __webpack_require__(367);
+	var asConfig = __webpack_require__(363);
+	var onEnter = __webpack_require__(369);
+	var toMoment = __webpack_require__(368);
+	
+	var TODAY;
+	
+	function emptyFn() {}
+	
+	var MonthView = React.createClass({
+	
+	  displayName: 'MonthView',
+	
+	  /**
+	   * Formats the given date in the specified format.
+	   * @method format
+	   *
+	   * @param  {Date/String/Moment} value
+	   * @param  {String} [format] If none specified, #dateFormat will be used
+	   *
+	   * @return {String}
+	   */
+	
+	  formatAsDay: function formatAsDay(moment, dayDisplayFormat) {
+	    return moment.format(dayDisplayFormat || 'D');
+	  },
+	
+	  getDefaultProps: function getDefaultProps() {
+	    return asConfig();
+	  },
+	
+	  getWeekStartMoment: function getWeekStartMoment(value) {
+	    var weekStartDay = this.weekStartDay;
+	    var clone = this.toMoment(value).day(weekStartDay);
+	
+	    return clone;
+	  },
+	
+	  /**
+	   * Returns all the days in the specified month.
+	   *
+	   * @param  {Moment/Date/Number} value
+	   * @return {Moment[]}
+	   */
+	  getDaysInMonth: function getDaysInMonth(value) {
+	    var first = this.toMoment(value).startOf('month');
+	    var start = this.getWeekStartMoment(first);
+	    var result = [];
+	    var i = 0;
+	
+	    if (first.add(-1, 'days').isBefore(start)) {
+	      //make sure the last day of prev month is included
+	      start.add(-1, 'weeks');
+	    }
+	
+	    for (; i < 42; i++) {
+	      result.push(this.toMoment(start));
+	      start.add(1, 'days');
+	    }
+	
+	    return result;
+	  },
+	
+	  render: function render() {
+	
+	    var props = assign({}, this.props);
+	
+	    this.toMoment = function (value, dateFormat) {
+	      return toMoment(value, dateFormat || props.dateFormat, { locale: props.locale });
+	    };
+	
+	    TODAY = +this.toMoment().startOf('day');
+	
+	    var dateFormat = props.dateFormat;
+	    var viewMoment = props.viewMoment = this.toMoment(props.viewDate, dateFormat);
+	
+	    var weekStartDay = props.weekStartDay;
+	
+	    if (weekStartDay == null) {
+	      weekStartDay = props.localeData._week ? props.localeData._week.dow : null;
+	    }
+	
+	    this.weekStartDay = props.weekStartDay = weekStartDay;
+	
+	    if (props.minDate && moment.isMoment(props.minDate)) {
+	      props.minDate.startOf('day');
+	    }
+	
+	    props.minDate && (props.minDate = +this.toMoment(props.minDate, dateFormat));
+	    props.maxDate && (props.maxDate = +this.toMoment(props.maxDate, dateFormat));
+	
+	    this.monthFirst = this.toMoment(viewMoment).startOf('month');
+	    this.monthLast = this.toMoment(viewMoment).endOf('month');
+	
+	    if (props.date) {
+	      props.moment = this.toMoment(props.date).startOf('day');
+	    }
+	
+	    var daysInView = this.getDaysInMonth(viewMoment);
+	
+	    return React.createElement(
+	      'div',
+	      { className: 'dp-table dp-month-view' },
+	      this.renderWeekDayNames(),
+	      this.renderDays(props, daysInView)
+	    );
+	  },
+	
+	  /**
+	   * Render the given array of days
+	   * @param  {Moment[]} days
+	   * @return {React.DOM}
+	   */
+	  renderDays: function renderDays(props, days) {
+	    var nodes = days.map(function (date) {
+	      return this.renderDay(props, date);
+	    }, this);
+	
+	    var len = days.length;
+	    var buckets = [];
+	    var bucketsLen = Math.ceil(len / 7);
+	
+	    var i = 0;
+	
+	    for (; i < bucketsLen; i++) {
+	      buckets.push(nodes.slice(i * 7, (i + 1) * 7));
+	    }
+	
+	    return buckets.map(function (bucket, i) {
+	      return React.createElement(
+	        'div',
+	        { key: "row" + i, className: 'dp-week dp-row' },
+	        bucket
+	      );
+	    });
+	  },
+	
+	  renderDay: function renderDay(props, date) {
+	    var dayText = FORMAT.day(date, props.dayFormat);
+	    var classes = ["dp-cell dp-day"];
+	
+	    var dateTimestamp = +date;
+	
+	    if (dateTimestamp == TODAY) {
+	      classes.push('dp-current');
+	    } else if (dateTimestamp < this.monthFirst) {
+	      classes.push('dp-prev');
+	    } else if (dateTimestamp > this.monthLast) {
+	      classes.push('dp-next');
+	    }
+	
+	    if (props.minDate && date < props.minDate) {
+	      classes.push('dp-disabled dp-before-min');
+	    }
+	    if (props.maxDate && date > props.maxDate) {
+	      classes.push('dp-disabled dp-after-max');
+	    }
+	
+	    if (dateTimestamp == props.moment) {
+	      classes.push('dp-value');
+	    }
+	
+	    var mom = this.toMoment(date);
+	    var onClick = this.handleClick.bind(this, props, date, dateTimestamp);
+	
+	    var renderDayProps = {
+	      role: 'link',
+	      tabIndex: 1,
+	      key: dayText,
+	      text: dayText,
+	      date: mom,
+	      moment: mom,
+	      className: classes.join(' '),
+	      style: {},
+	      onClick: onClick,
+	      onKeyUp: onEnter(onClick),
+	      children: dayText
+	    };
+	
+	    if (typeof props.onRenderDay === 'function') {
+	      renderDayProps = props.onRenderDay(renderDayProps);
+	    }
+	
+	    var defaultRenderFunction = React.DOM.div;
+	    var renderFunction = props.renderDay || defaultRenderFunction;
+	
+	    var result = renderFunction(renderDayProps);
+	
+	    if (result === undefined) {
+	      result = defaultRenderFunction(renderDayProps);
+	    }
+	
+	    return result;
+	  },
+	
+	  getWeekDayNames: function getWeekDayNames(props) {
+	    props = props || this.props;
+	
+	    var names = props.weekDayNames;
+	    var weekStartDay = this.weekStartDay;
+	
+	    if (typeof names == 'function') {
+	      names = names(weekStartDay, props.locale);
+	    } else if (Array.isArray(names)) {
+	
+	      names = [].concat(names);
+	
+	      var index = weekStartDay;
+	
+	      while (index > 0) {
+	        names.push(names.shift());
+	        index--;
+	      }
+	    }
+	
+	    return names;
+	  },
+	
+	  renderWeekDayNames: function renderWeekDayNames() {
+	    var names = this.getWeekDayNames();
+	
+	    return React.createElement(
+	      'div',
+	      { className: 'dp-row dp-week-day-names' },
+	      names.map(function (name, index) {
+	        return React.createElement(
+	          'div',
+	          { key: index, className: 'dp-cell dp-week-day-name' },
+	          name
+	        );
+	      })
+	    );
+	  },
+	
+	  handleClick: function handleClick(props, date, timestamp, event) {
+	    if (props.minDate && timestamp < props.minDate) {
+	      return;
+	    }
+	    if (props.maxDate && timestamp > props.maxDate) {
+	      return;
+	    }
+	
+	    event.target.value = date;(props.onChange || emptyFn)(date, event);
+	  }
+	});
+	
+	MonthView.getHeaderText = function (moment, props) {
+	  return toMoment(moment, null, { locale: props.locale }).format('MMMM YYYY');
+	};
+	
+	exports['default'] = MonthView;
+	module.exports = exports['default'];
+
+/***/ },
+/* 367 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	var CONFIG = __webpack_require__(364);
+	var toMoment = __webpack_require__(368);
+	
+	function f(mom, format) {
+	    return toMoment(mom).format(format);
+	}
+	
+	module.exports = {
+	    day: function day(mom, format) {
+	        return f(mom, format || CONFIG.dayFormat);
+	    },
+	
+	    month: function month(mom, format) {
+	        return f(mom, format || CONFIG.monthFormat);
+	    },
+	
+	    year: function year(mom, format) {
+	        return f(mom, format || CONFIG.yearFormat);
+	    }
+	};
+
+/***/ },
+/* 368 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	var moment = __webpack_require__(259);
+	var CONFIG = __webpack_require__(364);
+	
+	/**
+	 * This function will be used to convert a date to a moment.
+	 *
+	 * It accepts input as sring, date or moment
+	 *
+	 * @param  {String/Date/Moment} value
+	 * @param  {String} [dateFormat] if value is string, it will be parsed to a moment using this format
+	 * @param  {Object} [config]
+	 * @param  {Boolean} [config.strict] whether to perform strict parsing on strings
+	 * @return {Moment}
+	 */
+	module.exports = function (value, dateFormat, config) {
+	    var strict = !!(config && config.strict);
+	    var locale = config && config.locale;
+	
+	    dateFormat = dateFormat || CONFIG.dateFormat;
+	
+	    if (typeof value == 'string') {
+	        return moment(value, dateFormat, locale, strict);
+	    }
+	
+	    // return moment.isMoment(value)?
+	    // 			value:
+	    return moment(value == null ? new Date() : value, undefined, locale, strict);
+	};
+
+/***/ },
+/* 369 */
+/***/ function(module, exports) {
+
+	'use strict';
+	
+	module.exports = function onKeyUp(fn) {
+	  return function (event) {
+	    if (event.key == 'Enter') {
+	      fn(event);
+	    }
+	  };
+	};
+
+/***/ },
+/* 370 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	var React = __webpack_require__(1);
+	var moment = __webpack_require__(259);
+	
+	var FORMAT = __webpack_require__(367);
+	var asConfig = __webpack_require__(363);
+	var toMoment = __webpack_require__(368);
+	var onEnter = __webpack_require__(369);
+	var assign = __webpack_require__(362);
+	
+	var TODAY;
+	
+	function emptyFn() {}
+	
+	var YearView = React.createClass({
+	
+	    displayName: 'YearView',
+	
+	    getDefaultProps: function getDefaultProps() {
+	
+	        return asConfig();
+	    },
+	
+	    /**
+	     * Returns all the days in the specified month.
+	     *
+	     * @param  {Moment/Date/Number} value
+	     * @return {Moment[]}
+	     */
+	    getMonthsInYear: function getMonthsInYear(value) {
+	        var start = moment(value).startOf('year');
+	        var result = [];
+	        var i = 0;
+	
+	        for (; i < 12; i++) {
+	            result.push(moment(start));
+	            start.add(1, 'month');
+	        }
+	
+	        return result;
+	    },
+	
+	    render: function render() {
+	
+	        TODAY = +moment().startOf('day');
+	
+	        var props = assign({}, this.props);
+	
+	        var viewMoment = props.viewMoment = moment(this.props.viewDate);
+	
+	        if (props.date) {
+	            props.moment = moment(props.date).startOf('month');
+	        }
+	
+	        var monthsInView = this.getMonthsInYear(viewMoment);
+	
+	        return React.createElement(
+	            'div',
+	            { className: 'dp-table dp-year-view' },
+	            this.renderMonths(props, monthsInView)
+	        );
+	    },
+	
+	    /**
+	     * Render the given array of days
+	     * @param  {Moment[]} days
+	     * @return {React.DOM}
+	     */
+	    renderMonths: function renderMonths(props, days) {
+	        var nodes = days.map(function (date) {
+	            return this.renderMonth(props, date);
+	        }, this);
+	        var len = days.length;
+	        var buckets = [];
+	        var bucketsLen = Math.ceil(len / 4);
+	
+	        var i = 0;
+	
+	        for (; i < bucketsLen; i++) {
+	            buckets.push(nodes.slice(i * 4, (i + 1) * 4));
+	        }
+	
+	        return buckets.map(function (bucket, i) {
+	            return React.createElement(
+	                'div',
+	                { key: "row" + i, className: 'dp-row' },
+	                bucket
+	            );
+	        });
+	    },
+	
+	    renderMonth: function renderMonth(props, date) {
+	        var monthText = FORMAT.month(date, props.monthFormat);
+	        var classes = ["dp-cell dp-month"];
+	
+	        var dateTimestamp = +date;
+	
+	        if (dateTimestamp == props.moment) {
+	            classes.push('dp-value');
+	        }
+	
+	        var onClick = this.handleClick.bind(this, props, date);
+	
+	        return React.createElement(
+	            'div',
+	            {
+	                tabIndex: '1',
+	                role: 'link',
+	                key: monthText,
+	                className: classes.join(' '),
+	                onClick: onClick,
+	                onKeyUp: onEnter(onClick)
+	            },
+	            monthText
+	        );
+	    },
+	
+	    handleClick: function handleClick(props, date, event) {
+	        event.target.value = date;(props.onSelect || emptyFn)(date, event);
+	    }
+	});
+	
+	YearView.getHeaderText = function (moment, props) {
+	    return toMoment(moment, null, { locale: props.locale }).format('YYYY');
+	};
+	
+	module.exports = YearView;
+
+/***/ },
+/* 371 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	var React = __webpack_require__(1);
+	var moment = __webpack_require__(259);
+	var assign = __webpack_require__(362);
+	
+	var FORMAT = __webpack_require__(367);
+	var asConfig = __webpack_require__(363);
+	var toMoment = __webpack_require__(368);
+	var onEnter = __webpack_require__(369);
+	var assign = __webpack_require__(362);
+	
+	var TODAY;
+	
+	function emptyFn() {}
+	
+	var DecadeView = React.createClass({
+	
+	    displayName: 'DecadeView',
+	
+	    getDefaultProps: function getDefaultProps() {
+	        return asConfig();
+	    },
+	
+	    /**
+	     * Returns all the years in the decade of the given value
+	     *
+	     * @param  {Moment/Date/Number} value
+	     * @return {Moment[]}
+	     */
+	    getYearsInDecade: function getYearsInDecade(value) {
+	        var year = moment(value).get('year');
+	        var offset = year % 10;
+	
+	        year = year - offset - 1;
+	
+	        var result = [];
+	        var i = 0;
+	
+	        var start = moment(year, 'YYYY').startOf('year');
+	
+	        for (; i < 12; i++) {
+	            result.push(moment(start));
+	            start.add(1, 'year');
+	        }
+	
+	        return result;
+	    },
+	
+	    render: function render() {
+	
+	        TODAY = +moment().startOf('day');
+	
+	        var props = assign({}, this.props);
+	
+	        var viewMoment = props.viewMoment = moment(this.props.viewDate);
+	
+	        if (props.date) {
+	            props.moment = moment(props.date).startOf('year');
+	        }
+	
+	        var yearsInView = this.getYearsInDecade(viewMoment);
+	
+	        return React.createElement(
+	            'div',
+	            { className: 'dp-table dp-decade-view' },
+	            this.renderYears(props, yearsInView)
+	        );
+	    },
+	
+	    /**
+	     * Render the given array of days
+	     * @param  {Moment[]} days
+	     * @return {React.DOM}
+	     */
+	    renderYears: function renderYears(props, days) {
+	        var nodes = days.map(function (date, index, arr) {
+	            return this.renderYear(props, date, index, arr);
+	        }, this);
+	        var len = days.length;
+	        var buckets = [];
+	        var bucketsLen = Math.ceil(len / 4);
+	
+	        var i = 0;
+	
+	        for (; i < bucketsLen; i++) {
+	            buckets.push(nodes.slice(i * 4, (i + 1) * 4));
+	        }
+	
+	        return buckets.map(function (bucket, i) {
+	            return React.createElement(
+	                'div',
+	                { key: "row" + i, className: 'dp-row' },
+	                bucket
+	            );
+	        });
+	    },
+	
+	    renderYear: function renderYear(props, date, index, arr) {
+	        var yearText = FORMAT.year(date, props.yearFormat);
+	        var classes = ["dp-cell dp-year"];
+	
+	        var dateTimestamp = +date;
+	
+	        if (dateTimestamp == props.moment) {
+	            classes.push('dp-value');
+	        }
+	
+	        if (!index) {
+	            classes.push('dp-prev');
+	        }
+	
+	        if (index == arr.length - 1) {
+	            classes.push('dp-next');
+	        }
+	
+	        var onClick = this.handleClick.bind(this, props, date);
+	
+	        return React.createElement(
+	            'div',
+	            {
+	                role: 'link',
+	                tabIndex: '1',
+	                key: yearText,
+	                className: classes.join(' '),
+	                onClick: onClick,
+	                onKeyUp: onEnter(onClick)
+	            },
+	            yearText
+	        );
+	    },
+	
+	    handleClick: function handleClick(props, date, event) {
+	        event.target.value = date;(props.onSelect || emptyFn)(date, event);
+	    }
+	});
+	
+	DecadeView.getHeaderText = function (value, props) {
+	    var year = moment(value).get('year');
+	    var offset = year % 10;
+	
+	    year = year - offset - 1;
+	
+	    return year + ' - ' + (year + 11);
+	};
+	
+	module.exports = DecadeView;
+
+/***/ },
+/* 372 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	var React = __webpack_require__(1);
+	var P = React.PropTypes;
+	var onEnter = __webpack_require__(369);
+	
+	module.exports = React.createClass({
+	
+	  displayName: 'DatePickerHeader',
+	
+	  propTypes: {
+	    onChange: P.func,
+	    onPrev: P.func,
+	    onNext: P.func,
+	    colspan: P.number,
+	    children: P.node
+	  },
+	
+	  render: function render() {
+	
+	    var props = this.props;
+	
+	    return React.createElement(
+	      'div',
+	      { className: 'dp-header' },
+	      React.createElement(
+	        'div',
+	        { className: 'dp-nav-table' },
+	        React.createElement(
+	          'div',
+	          { className: 'dp-row' },
+	          React.createElement(
+	            'div',
+	            {
+	              tabIndex: '1',
+	              role: 'link',
+	              className: 'dp-prev-nav dp-nav-cell dp-cell',
+	              onClick: props.onPrev,
+	              onKeyUp: onEnter(props.onPrev)
+	            },
+	            props.prevText
+	          ),
+	          React.createElement(
+	            'div',
+	            {
+	              tabIndex: '1',
+	              role: 'link',
+	              className: 'dp-nav-view dp-cell',
+	              colSpan: props.colspan,
+	              onClick: props.onChange,
+	              onKeyUp: onEnter(props.onChange)
+	            },
+	            props.children
+	          ),
+	          React.createElement(
+	            'div',
+	            {
+	              tabIndex: '1',
+	              role: 'link',
+	              className: 'dp-next-nav dp-nav-cell dp-cell',
+	              onClick: props.onNext,
+	              onKeyUp: onEnter(props.onNext)
+	            },
+	            props.nextText
+	          )
+	        )
+	      )
+	    );
+	  }
+	
+	});
 
 /***/ }
 /******/ ]);
