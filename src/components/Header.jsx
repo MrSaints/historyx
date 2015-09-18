@@ -7,10 +7,7 @@ const Header = React.createClass({
     mixins: [FluxMixin],
 
     getInitialState() {
-        return {
-            submitted: false,
-            query: this.props.query
-        };
+        return {query: this.props.query};
     },
 
     handleQueryChange(e) {
@@ -21,7 +18,6 @@ const Header = React.createClass({
         e.preventDefault();
         const flux = this.getFlux();
         const q = this.state.query.trim();
-        this.setState({submitted: true});
         flux.actions.search.changeQuery(q);
         flux.actions.history.load(this.props.date, q);
     },
@@ -29,10 +25,9 @@ const Header = React.createClass({
     handleClear(e) {
         e.preventDefault();
         this.setState({query: ""});
-        if (!this.state.submitted) {
+        if (this.props.query === "") {
             return;
         }
-        this.setState({submitted: false});
         const flux = this.getFlux();
         flux.actions.search.changeQuery("");
         flux.actions.history.load(this.props.date);
