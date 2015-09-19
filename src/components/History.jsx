@@ -22,13 +22,18 @@ class History extends React.Component {
 
         let formattedTitle = "";
         if (this.props.query !== "") {
-            formattedTitle += "Searching: \"" + this.props.query + "\" on ";
+            formattedTitle += "Searching: \"" + this.props.query + "\"";
+            if (this.props.date) {
+                formattedTitle += " on ";
+            }
         }
-        formattedTitle += selectedDay.format("dddd, MMM Do YY'");
+        if (this.props.date) {
+            formattedTitle += selectedDay.format("dddd, MMM Do YY'");
+        }
 
         return (
             <div className="history list-group">
-                <HistoryHead title={formattedTitle} />
+                <HistoryHead title={formattedTitle || "All visits"} />
                 {items.map(obj => {
                     return <HistoryItem
                             key={obj.id}
