@@ -49,8 +49,8 @@ const Header = React.createClass({
                 className="navbar navbar-dark navbar-fixed-top"
                 role="banner">
                 <div className="container-fluid">
-                    <a className="navbar-brand" href="#" title="Chrome History (Powered by DeLorean)">
-                        History
+                    <a className="navbar-brand" href="#">
+                        History<sup>&chi;</sup>
                     </a>
                     <form
                         className="form-inline navbar-form pull-right"
