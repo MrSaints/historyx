@@ -47,7 +47,8 @@ const Main = React.createClass({
             <div>
                 <Header
                     date={this.state.search.date}
-                    query={this.state.search.query} />
+                    query={this.state.search.query}
+                    limit={this.state.search.paginate.limit} />
                 <div className="container-fluid">
                     <div className="row">
                         <Sidebar

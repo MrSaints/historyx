@@ -16,10 +16,11 @@ const Header = React.createClass({
 
     handleSearchSubmit(e) {
         e.preventDefault();
-        const flux = this.getFlux();
+        const actions = this.getFlux().actions;
         const q = this.state.query.trim();
-        flux.actions.search.changeQuery(q);
-        flux.actions.history.load(this.props.date, q);
+        actions.search.changePaginate(0, this.props.limit);
+        actions.search.changeQuery(q);
+        actions.history.load(this.props.date, q);
     },
 
     handleClear(e) {
@@ -28,9 +29,9 @@ const Header = React.createClass({
         if (this.props.query === "") {
             return;
         }
-        const flux = this.getFlux();
-        flux.actions.search.changeQuery("");
-        flux.actions.history.load(this.props.date);
+        const actions = this.getFlux().actions;
+        actions.search.changeQuery("");
+        actions.history.load(this.props.date);
     },
 
     render() {
