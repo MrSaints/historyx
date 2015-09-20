@@ -60,6 +60,7 @@ const Header = React.createClass({
                                 className="form-control"
                                 type="text"
                                 placeholder="Search"
+                                tabIndex="1"
                                 value={this.state.query}
                                 onChange={this.handleQueryChange} />
                             {this.state.query.length > 0 ? clearButton : null}
