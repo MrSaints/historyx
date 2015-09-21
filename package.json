@@ -1,6 +1,6 @@
 {
   "name": "historyx",
-  "version": "2.2.0",
+  "version": "2.3.0",
   "description": "A Chrome extension to enhance your browsing history experience.",
   "main": "assets/js/bundle.js",
   "scripts": {
