@@ -50,7 +50,11 @@ const Header = React.createClass({
                 className="navbar navbar-dark navbar-fixed-top"
                 role="banner">
                 <div className="container-fluid">
-                    <a className="navbar-brand" href="#">
+                    <a
+                        className="navbar-brand"
+                        href="https://github.com/MrSaints/historyx"
+                        target="_blank"
+                        title="HistoryX Source">
                         History<sup>&chi;</sup>
                     </a>
                     <form
