@@ -4,4 +4,4 @@ _A work in progress._
 
 A Chrome extension to enhance your browsing history experience.
 
-![Screenshot v2.2.0](http://i.imgur.com/vdhzr6q.png)
+![Screenshot v2.3.2](http://i.imgur.com/DYIOUZI.png)
