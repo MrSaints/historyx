@@ -5,7 +5,7 @@
   background-color: #fdba2c;
   height: 6px;
   left: 0;
-  position: absolute;
+  position: fixed;
   top: 54px;
   width: 100%;
 }
