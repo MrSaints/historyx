@@ -1,5 +1,5 @@
 import Constants from "../constants/HistoryConstants.jsx";
-import {searchHistory} from "../utils/ChromeAPI.jsx";
+import {searchHistory, deleteUrl} from "../utils/ChromeAPI.jsx";
 
 import Moment from "moment";
 
@@ -18,6 +18,12 @@ export default {
         searchHistory(q, start, end)
             .then(HistoryItems => {
                 this.dispatch(Constants.LOAD_HISTORY_COMPLETE, HistoryItems);
+            });
+    },
+    delete(id, u) {
+        deleteUrl(u)
+            .then(() => {
+                this.dispatch(Constants.DELETE_URL, id);
             });
     }
 };

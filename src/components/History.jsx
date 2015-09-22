@@ -34,8 +34,9 @@ class History extends React.Component {
         return (
             <div className="history list-group">
                 <HistoryHead title={formattedTitle || "All visits"} />
-                {items.map(obj => {
+                {items.map((obj, i) => {
                     return <HistoryItem
+                            id={i}
                             key={obj.id}
                             info={obj}
                             stale={obj.lastVisitTime > selectedDay.endOf("day").valueOf() ? true : false} />

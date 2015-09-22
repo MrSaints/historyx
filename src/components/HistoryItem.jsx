@@ -6,11 +6,16 @@ class HistoryItem extends React.Component {
     constructor(props) {
         super(props);
         this.state = {showActions: false};
-        this.toggleActions = this.toggleActions.bind(this);
+        this.showActions = this.showActions.bind(this);
+        this.hideActions = this.hideActions.bind(this);
     }
 
-    toggleActions(e) {
-        this.setState({showActions: !this.state.showActions});
+    showActions(e) {
+        this.setState({showActions: true});
+    }
+
+    hideActions(e) {
+        this.setState({showActions: false});
     }
 
     render() {
@@ -30,8 +35,8 @@ class HistoryItem extends React.Component {
                 href={info.url}
                 className="list-group-item history__item"
                 target="_blank"
-                onMouseEnter={this.toggleActions}
-                onMouseLeave={this.toggleActions}>
+                onMouseEnter={this.showActions}
+                onMouseLeave={this.hideActions}>
                 <div className="history__date text-muted" title="Date / time of last visit">
                     {Moment(info.lastVisitTime).format(tokens)}
                 </div>
@@ -41,7 +46,7 @@ class HistoryItem extends React.Component {
                         <small>{info.url}</small>
                     </div>
                 </div>
-                {this.state.showActions ? <HistoryActions /> : null}
+                {this.state.showActions ? <HistoryActions id={this.props.id} url={info.url} /> : null}
                 <div className="history__visits">
                     <span className="label label-history" title="Total visits">
                        {info.visitCount}

@@ -1,3 +1,4 @@
+import React from "react/addons";
 import Fluxxor from "fluxxor";
 import Constants from "../constants/HistoryConstants.jsx";
 
@@ -9,7 +10,8 @@ const HistoryStore = Fluxxor.createStore({
 
         this.bindActions(
             Constants.LOAD_HISTORY, this.onLoadHistory,
-            Constants.LOAD_HISTORY_COMPLETE, this.onLoadHistoryComplete
+            Constants.LOAD_HISTORY_COMPLETE, this.onLoadHistoryComplete,
+            Constants.DELETE_URL, this.onDeleteUrl
         );
     },
     onLoadHistory() {
@@ -19,6 +21,12 @@ const HistoryStore = Fluxxor.createStore({
     onLoadHistoryComplete(obj) {
         this.state.loading = false;
         this.state.items = obj;
+        this.emit("change");
+    },
+    onDeleteUrl(id) {
+        this.state.items = React.addons.update(this.state.items, {
+            $splice: [[id, 1]]
+        });
         this.emit("change");
     },
     getState() {
