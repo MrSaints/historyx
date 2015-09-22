@@ -23,3 +23,11 @@ export function getVisits(u) {
         });
     });
 };
+
+export function deleteUrl(u) {
+    return new Promise((resolve, reject) => {
+        chrome.history.deleteUrl({url: u}, () => {
+            resolve();
+        });
+    });
+};
