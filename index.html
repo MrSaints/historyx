@@ -16,6 +16,14 @@
                 padding-top: 54px;
             }
 
+            .truncate {
+                max-width: 100%;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                vertical-align: top;
+                white-space: nowrap;
+            }
+
             .navbar {
                 background: #303F9F;
             }
@@ -68,38 +76,36 @@
                         margin: 0;
                     }
                 .history__item {
-                    padding-left: 9.25rem;
-                    padding-right: 5rem;
+                    align-items: center;
+                    display: flex;
                 }
                     .history__date {
-                        border-right: 0.0625rem solid rgba(0, 0, 0, 0.12);
-                        left: 1.25rem;
-                        height: 100%;
-                        padding-top: 0.75rem;
-                        padding-right: 1.25rem;
-                        position: absolute;
-                        top: 0;
-                        width: 124px;
+                        width: 120px;
                     }
-                        .history__date > .history__date--stale {
-                            display: inline-block;
-                            margin-top: -0.375rem;
+                        .history__date:after {
+                            border-right: 1px solid rgba(0, 0, 0, 0.12);
+                            content: "";
+                            height: 100%;
+                            left: 140px;
+                            position: absolute;
+                            top: 0;
                         }
-                    .history__url {
-                        display: inline-block;
-                        max-width: 100%;
-                        overflow: hidden;
-                        padding-left: 3.25rem;
-                        text-overflow: ellipsis;
-                        vertical-align: top;
-                        white-space: nowrap;
+                    .history__info {
+                        flex: 1;
+                        padding-left: 3.5rem;
+                        padding-right: 1.25rem;
+                    }
+                        .history__title, .history__url {
+                            display: block;
+                        }
+                            .history__title {
+                                color: #FF4081;
+                            }
+                    .history__action {
                     }
                     .history__visits {
-                        margin-top: .75rem;
-                        position: absolute;
-                        right: 1.25rem;
-                        top: 0;
                         text-align: right;
+                        width: 45px;
                     }
                         .label-history {
                             background: #3F51B5;

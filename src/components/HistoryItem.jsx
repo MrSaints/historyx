@@ -9,14 +9,9 @@ class HistoryItem extends React.Component {
     render() {
         const info = this.props.info;
 
-        const dateTime = Moment(info.lastVisitTime);
-        let formattedTime = dateTime.format("hh:mm:ss A");
+        let tokens = "hh:mm:ss A";
         if (this.props.stale) {
-            formattedTime = (
-                <small className="text-muted history__date--stale" title="Last visited time">
-                    {dateTime.format("hh:mm A, DD-MM-YYYY")}
-                </small>
-            );
+            tokens = "hh:mm A, DD-MM-YYYY";
         }
 
         const favicon = {
@@ -24,11 +19,21 @@ class HistoryItem extends React.Component {
         };
 
         return (
-            <a href={info.url} className="list-group-item history__item" target="_blank">
-                <div className="history__url" style={favicon}>{info.title || info.url}</div>
-                <div className="history__date">{formattedTime}</div>
+            <a
+                href={info.url}
+                className="list-group-item history__item"
+                target="_blank">
+                <div className="history__date text-muted" title="Date / time of last visit">
+                    {Moment(info.lastVisitTime).format(tokens)}
+                </div>
+                <div className="history__info" style={favicon}>
+                    <div className="history__title truncate">{info.title || "Untitled"}</div>
+                    <div className="history__url text-muted truncate">
+                        <small>{info.url}</small>
+                    </div>
+                </div>
                 <div className="history__visits">
-                    <span className="label label-default label-history" title="Total visits">
+                    <span className="label label-history" title="Total visits">
                        {info.visitCount}
                     </span>
                 </div>
