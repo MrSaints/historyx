@@ -7,10 +7,12 @@ module.exports = {
         path: __dirname + "/assets/js",
         filename: "bundle.js"
     },
-    devtool: "source-map",
+    //devtool: "source-map",
     module: {
-        loaders: [
-            { test: /\.jsx$/, loader: "babel-loader" }
-        ]
+        loaders: [{
+            test: /\.jsx$/,
+            exclude: "./node_modules",
+            loader: "babel-loader"
+        }]
     }
 };
