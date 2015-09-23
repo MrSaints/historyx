@@ -8,7 +8,7 @@ _A work in progress._
 
 A Chrome extension to enhance your browsing history experience.
 
-[Announcement][announcement] | [Screenshot (v2.4.0)](screenshot)
+[Announcement][announcement] | [Screenshot (v2.4.0)][screenshot]
 
 
 [install]: https://goo.gl/d8D1JP
