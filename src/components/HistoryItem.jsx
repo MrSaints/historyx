@@ -35,7 +35,7 @@ class HistoryItem extends React.Component {
                 href={info.url}
                 className="list-group-item history__item"
                 target="_blank"
-                onMouseEnter={this.showActions}
+                onMouseOver={this.showActions}
                 onMouseLeave={this.hideActions}>
                 <div className="history__date text-muted" title="Date / time of last visit">
                     {Moment(info.lastVisitTime).format(tokens)}
