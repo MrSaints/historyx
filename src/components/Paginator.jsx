@@ -66,7 +66,7 @@ const Paginator = React.createClass({
                         <button
                             type="button"
                             className="btn btn-secondary paginator__nav"
-                            disabled={this.props.paginate.page + 1 > Math.floor(this.props.total / this.props.paginate.limit)}
+                            disabled={parseInt(this.props.paginate.limit) === 0 || this.props.paginate.page + 1 > Math.floor(this.props.total / this.props.paginate.limit)}
                             onClick={this.handleNextPage}>
                             <i className="material-icons">keyboard_arrow_right</i>
                         </button>
