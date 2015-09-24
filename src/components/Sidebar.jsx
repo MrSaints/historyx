@@ -25,11 +25,13 @@ const Sidebar = React.createClass({
     },
 
     render() {
+        const weekDayNames = ['S','M','T','W','T','F','S'];
         return (
             <div className="sidebar">
                 <div className="datepicker">
                     <DatePicker
                         onChange={this.handleDateChange}
+                        weekDayNames={weekDayNames}
                         date={this.props.date}
                         maxDate={Moment()}
                         monthFormat="MMM" />
