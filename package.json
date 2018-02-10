@@ -1,22 +1,30 @@
 {
-  "name": "historyx",
-  "version": "2.4.2",
-  "description": "A Chrome extension to enhance your browsing history experience.",
-  "main": "assets/js/bundle.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "author": "Ian Lai <os@fyianlai.com> (https://www.fyianlai.com/)",
-  "license": "MIT",
-  "private": true,
-  "devDependencies": {
-    "babel-core": "^5.8.24",
-    "babel-loader": "^5.3.2",
-    "fluxxor": "^1.7.1",
-    "moment": "^2.10.6",
-    "react": "^0.13.3",
-    "react-date-picker": "^3.1.3",
-    "webpack": "^1.12.1"
-  },
-  "dependencies": {}
+    "name": "historyx",
+    "private": true,
+    "scripts": {
+        "start": "neutrino start",
+        "build": "neutrino build",
+        "build/dev": "neutrino build --options.env.NODE_ENV development",
+        "fmt": "yarn fmt:js && yarn fmt:json",
+        "fmt:js":
+            "prettier --write '{*.js,src/**/*.js}' && eslint --fix '{*.js,src/**/*.js}'",
+        "fmt:json": "prettier --parser json --write '{*.json,src/**/*.json}'"
+    },
+    "dependencies": {
+        "antd": "^3.2.0",
+        "date-fns": "^1.29.0",
+        "glamor": "^2.20.40",
+        "prop-types": "^15.6.0",
+        "ramda": "^0.25.0",
+        "react": "^16.2.0",
+        "react-dom": "^16.2.0"
+    },
+    "devDependencies": {
+        "@neutrinojs/react": "^8.1.1",
+        "babel-eslint": "^8.2.1",
+        "eslint": "^4.17.0",
+        "eslint-plugin-react": "^7.6.1",
+        "neutrino": "^8.1.1",
+        "prettier": "^1.10.2"
+    }
 }
