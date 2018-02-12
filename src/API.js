@@ -1,6 +1,6 @@
 /* global chrome */
 
-export const Search = (
+export const SearchHistory = (
     query = "",
     startTime = 0,
     endTime = null,
@@ -21,10 +21,26 @@ export const Search = (
     });
 };
 
+export const GetVisits = url => {
+    return new Promise(resolve => {
+        chrome.history.getVisits({ url }, r => {
+            resolve(r);
+        });
+    });
+};
+
 export const DeleteURL = url => {
     return new Promise(resolve => {
         chrome.history.deleteUrl({ url }, () => {
             resolve();
+        });
+    });
+};
+
+export const GetBookmarks = () => {
+    return new Promise(resolve => {
+        chrome.bookmarks.getTree(b => {
+            resolve(b);
         });
     });
 };
