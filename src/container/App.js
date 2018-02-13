@@ -8,7 +8,7 @@ import History from "./History";
 
 const styles = {
     header: css({
-        background: "#3F51B5"
+        background: "#3F51B5",
     }),
     sourceLink: css({
         color: "#FFF",
@@ -34,7 +34,8 @@ export default class App extends React.Component {
                                 href="https://github.com/MrSaints/historyx"
                                 rel="noopener noreferrer"
                                 target="_blank"
-                                title="HistoryX Source">
+                                title="HistoryX Source"
+                            >
                                 History<sup>&chi;3</sup>
                             </a>
                         </Col>

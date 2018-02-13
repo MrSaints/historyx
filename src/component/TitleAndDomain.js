@@ -39,7 +39,10 @@ const TitleAndDomain = ({ title, domain, visitCount = 0 }) => {
             <a {...styles.link} href={domain} />
             <div {...styles.title}>{title || domain}</div>
             <div {...styles.meta}>
-                <Badge count={visitCount} style={{ backgroundColor: "#5C6BC0" }} />
+                <Badge
+                    count={visitCount}
+                    style={{ backgroundColor: "#5C6BC0" }}
+                />
             </div>
             <div {...styles.meta} {...styles.domain}>
                 {parser.hostname}

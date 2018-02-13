@@ -1,6 +1,6 @@
 /* global chrome */
 
-export const SearchHistory = (query) => {
+export const SearchHistory = query => {
     return new Promise(resolve => {
         chrome.history.search(query, h => {
             //console.table(h);

@@ -41,7 +41,7 @@ class Visits extends React.Component {
     constructor(props) {
         super(props);
 
-        this.columns = [,
+        this.columns = [
             {
                 title: "Transition",
                 dataIndex: "transition",
@@ -49,11 +49,17 @@ class Visits extends React.Component {
                 width: 30,
                 render: transition => {
                     const iconType = R.prop(transition, transitionToIconType);
-                    const description = R.prop(transition, transitionToDescription);
-                    return iconType && description && (
-                        <Tooltip title={description}>
-                            <Icon type={iconType} />
-                        </Tooltip>
+                    const description = R.prop(
+                        transition,
+                        transitionToDescription
+                    );
+                    return (
+                        iconType &&
+                        description && (
+                            <Tooltip title={description}>
+                                <Icon type={iconType} />
+                            </Tooltip>
+                        )
                     );
                 },
             },
@@ -69,7 +75,7 @@ class Visits extends React.Component {
                         {visitTime}
                     </DateFormat>
                 ),
-            }
+            },
         ];
     }
 

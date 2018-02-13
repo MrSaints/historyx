@@ -87,17 +87,12 @@ class Toolbar extends React.Component {
         if (this.props.totalSelections) {
             return (
                 <Button.Group className={`${styles.selections}`}>
-                    <Button
-                        type="danger"
-                        onClick={this.handleDeleteSelections}
-                    >
+                    <Button type="danger" onClick={this.handleDeleteSelections}>
                         <Icon type="delete" />
                         {`Remove ${this.props.totalSelections} selected`}
                     </Button>
 
-                    <Button
-                        onClick={this.handleCancelSelections}
-                    >
+                    <Button onClick={this.handleCancelSelections}>
                         <Icon type="close" />
                         Cancel
                     </Button>
@@ -137,4 +132,8 @@ const mapStateToProps = state => {
     };
 };
 
-export default connect(mapStateToProps, { loadHistory, setSelections, deleteSelections })(Toolbar);
+export default connect(mapStateToProps, {
+    loadHistory,
+    setSelections,
+    deleteSelections,
+})(Toolbar);

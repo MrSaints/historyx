@@ -76,7 +76,7 @@ class History extends React.Component {
 
     renderVisits = record => <Visits url={record.url} />;
 
-    handleRowSelection = (selectedRowKeys) => {
+    handleRowSelection = selectedRowKeys => {
         this.props.setSelections(selectedRowKeys);
     };
 
@@ -118,6 +118,8 @@ const mapStateToProps = state => {
     };
 };
 
-export default connect(mapStateToProps, { loadBookmarks, setSelections, loadHistory })(
-    History
-);
+export default connect(mapStateToProps, {
+    loadBookmarks,
+    setSelections,
+    loadHistory,
+})(History);

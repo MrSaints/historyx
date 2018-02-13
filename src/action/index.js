@@ -18,7 +18,7 @@ export const loadHistory = (
     startTime = 0,
     endTime = null,
     maxResults = 0,
-    cache = true,
+    cache = true
 ) => {
     const query = {
         text,
@@ -44,7 +44,7 @@ export const loadHistory = (
     };
 };
 
-export const setSelections = (selections) => ({
+export const setSelections = selections => ({
     type: HISTORY_SELECTIONS,
     selections,
 });
@@ -54,13 +54,8 @@ export const deleteSelections = () => {
         const { history } = getState();
         const excludeNils = R.reject(R.isNil);
         const getURLsFromIDs = R.pipe(
-            R.map(
-                R.pipe(
-                    (id) => [id, "url"],
-                    R.path(R.__, history.byID)
-                )
-            ),
-            excludeNils,
+            R.map(R.pipe(id => [id, "url"], R.path(R.__, history.byID))),
+            excludeNils
         );
         const getDeletePromises = R.map(DeleteURL);
 
