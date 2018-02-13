@@ -4,12 +4,20 @@ import {
     HISTORY_REQUEST,
     HISTORY_SUCCESS,
     HISTORY_FAILURE,
+    HISTORY_SELECTIONS,
 } from "../constants";
 
 const defaultState = {
     isLoading: false,
     byID: {},
     visibleIDs: [],
+    selectedIDs: [],
+    query: {
+        query: "",
+        startTime: 0,
+        endTime: null,
+        maxResults: 0,
+    },
 };
 
 const history = (state = defaultState, action) => {
@@ -18,6 +26,7 @@ const history = (state = defaultState, action) => {
         return {
             ...state,
             isLoading: true,
+            query: action.query,
         };
     case HISTORY_SUCCESS:
         return {
@@ -34,6 +43,11 @@ const history = (state = defaultState, action) => {
             ...state,
             isLoading: false,
         };
+    case HISTORY_SELECTIONS:
+        return {
+            ...state,
+            selectedIDs: action.selections,
+        };
     default:
         return state;
     }
@@ -43,4 +57,8 @@ export default history;
 
 export const getVisibleHistory = state => {
     return R.map(R.prop(R.__, state.history.byID), state.history.visibleIDs);
+};
+
+export const totalSelections = state => {
+    return R.length(state.history.selectedIDs);
 };

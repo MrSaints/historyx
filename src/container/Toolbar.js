@@ -3,11 +3,16 @@ import * as R from "ramda";
 import { connect } from "react-redux";
 import { css } from "glamor";
 
-import { Button, DatePicker, Icon, Input } from "antd";
+import { Button, DatePicker, Icon, Input, Modal } from "antd";
 
-import { loadHistory } from "../action";
+import { loadHistory, setSelections, deleteSelections } from "../action";
+import { totalSelections } from "../reducer";
 
 const styles = {
+    selections: css({
+        display: "block !important",
+        textAlign: "center",
+    }),
     filters: css({
         alignItems: "center",
         display: "flex !important",
@@ -46,6 +51,23 @@ class Toolbar extends React.Component {
         });
     };
 
+    handleDeleteSelections = () => {
+        Modal.confirm({
+            title: "Remove selected items",
+            content:
+                "Are you sure that you want to delete these pages from your history?",
+            okText: "Remove",
+            cancelText: "Cancel",
+            onOk: () => {
+                this.props.deleteSelections();
+            },
+        });
+    };
+
+    handleCancelSelections = () => {
+        this.props.setSelections([]);
+    };
+
     hasFilters = () => {
         return !R.equals(this.state, this.defaultState);
     };
@@ -62,6 +84,27 @@ class Toolbar extends React.Component {
     };
 
     render() {
+        if (this.props.totalSelections) {
+            return (
+                <Button.Group className={`${styles.selections}`}>
+                    <Button
+                        type="danger"
+                        onClick={this.handleDeleteSelections}
+                    >
+                        <Icon type="delete" />
+                        {`Remove ${this.props.totalSelections} selected`}
+                    </Button>
+
+                    <Button
+                        onClick={this.handleCancelSelections}
+                    >
+                        <Icon type="close" />
+                        Cancel
+                    </Button>
+                </Button.Group>
+            );
+        }
+
         return (
             <Input.Group compact className={`${styles.filters}`}>
                 <Input.Search
@@ -88,4 +131,10 @@ class Toolbar extends React.Component {
     }
 }
 
-export default connect(null, { loadHistory })(Toolbar);
+const mapStateToProps = state => {
+    return {
+        totalSelections: totalSelections(state),
+    };
+};
+
+export default connect(mapStateToProps, { loadHistory, setSelections, deleteSelections })(Toolbar);

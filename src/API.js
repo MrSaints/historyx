@@ -1,20 +1,8 @@
 /* global chrome */
 
-export const SearchHistory = (
-    query = "",
-    startTime = 0,
-    endTime = null,
-    maxResults = 0
-) => {
-    const params = {
-        text: query,
-        startTime,
-        endTime,
-        maxResults,
-    };
-
+export const SearchHistory = (query) => {
     return new Promise(resolve => {
-        chrome.history.search(params, h => {
+        chrome.history.search(query, h => {
             //console.table(h);
             resolve(h);
         });

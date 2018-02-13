@@ -5,7 +5,7 @@ import { css } from "glamor";
 import { Table } from "antd";
 
 import { getVisibleHistory } from "../reducer";
-import { loadBookmarks, loadHistory } from "../action";
+import { loadBookmarks, setSelections, loadHistory } from "../action";
 
 import BookmarkIcon from "./BookmarkIcon";
 import Visits from "./Visits";
@@ -76,8 +76,17 @@ class History extends React.Component {
 
     renderVisits = record => <Visits url={record.url} />;
 
+    handleRowSelection = (selectedRowKeys) => {
+        this.props.setSelections(selectedRowKeys);
+    };
+
     render() {
         const getRowKey = record => record.id;
+
+        const rowSelection = {
+            onChange: this.handleRowSelection,
+            selectedRowKeys: this.props.selectedIDs,
+        };
 
         return (
             <Table
@@ -88,7 +97,7 @@ class History extends React.Component {
                 footer={() => {}}
                 loading={this.props.isLoading}
                 rowKey={getRowKey}
-                rowSelection={{}}
+                rowSelection={rowSelection}
                 showHeader={false}
                 size="small"
                 pagination={{
@@ -104,10 +113,11 @@ class History extends React.Component {
 const mapStateToProps = state => {
     return {
         history: getVisibleHistory(state),
+        selectedIDs: state.history.selectedIDs,
         isLoading: state.history.isLoading,
     };
 };
 
-export default connect(mapStateToProps, { loadBookmarks, loadHistory })(
+export default connect(mapStateToProps, { loadBookmarks, setSelections, loadHistory })(
     History
 );
