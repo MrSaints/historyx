@@ -8,7 +8,8 @@
         "fmt": "yarn fmt:js && yarn fmt:json",
         "fmt:js":
             "prettier --write '{*.js,src/**/*.js}' && eslint --fix '{*.js,src/**/*.js}'",
-        "fmt:json": "prettier --parser json --write '{*.json,src/**/*.json}'"
+        "fmt:json": "prettier --parser json --write '{*.json,src/**/*.json}'",
+        "package": "zip -FSr extension.zip manifest.json LICENSE build"
     },
     "dependencies": {
         "antd": "^3.2.0",
