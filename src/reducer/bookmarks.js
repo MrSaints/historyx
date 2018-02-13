@@ -19,24 +19,17 @@ const bookmarks = (state = defaultState, action) => {
             isLoading: true,
         };
     case BOOKMARKS_SUCCESS: {
-        const flattenBookmarks = R.pipe(
-            R.map(node => {
-                const isFolder = R.isNil(R.prop("url", node));
-                const nodeIfBookmark = isFolder ? null : node;
-                const children = R.prop("children", node);
-                return R.isNil(children)
-                    ? nodeIfBookmark
-                    : [nodeIfBookmark, ...flattenBookmarks(children)];
-            }),
-            R.flatten
-        );
+        const flattenBookmarks = R.reduce((acc, node) => {
+            const children = R.prop("children", node);
+            const isFolder = R.isNil(R.prop("url", node));
+            node = isFolder ? [] : [node];
+            if (R.isNil(children)) {
+                return [...acc, ...node];
+            }
+            return [...acc, ...node, ...flattenBookmarks(children)];
+        }, []);
         const indexByURL = R.indexBy(R.prop("url"));
-        const excludeNils = R.reject(R.isNil);
-        const getAllBookmarksByURL = R.pipe(
-            flattenBookmarks,
-            excludeNils,
-            indexByURL
-        );
+        const getAllBookmarksByURL = R.pipe(flattenBookmarks, indexByURL);
 
         return {
             ...state,
