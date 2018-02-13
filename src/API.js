@@ -2,18 +2,13 @@
 
 export const SearchHistory = query => {
     return new Promise(resolve => {
-        chrome.history.search(query, h => {
-            //console.table(h);
-            resolve(h);
-        });
+        chrome.history.search(query, resolve);
     });
 };
 
 export const GetVisits = url => {
     return new Promise(resolve => {
-        chrome.history.getVisits({ url }, r => {
-            resolve(r);
-        });
+        chrome.history.getVisits({ url }, resolve);
     });
 };
 
@@ -27,8 +22,12 @@ export const DeleteURL = url => {
 
 export const GetBookmarks = () => {
     return new Promise(resolve => {
-        chrome.bookmarks.getTree(b => {
-            resolve(b);
-        });
+        chrome.bookmarks.getTree(resolve);
+    });
+};
+
+export const CreateTab = props => {
+    return new Promise(resolve => {
+        chrome.tabs.create(props, resolve);
     });
 };

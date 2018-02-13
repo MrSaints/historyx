@@ -65,10 +65,6 @@ const columns = [
 ];
 
 class History extends React.Component {
-    constructor(props) {
-        super(props);
-    }
-
     componentDidMount() {
         this.props.loadHistory();
         this.props.loadBookmarks();

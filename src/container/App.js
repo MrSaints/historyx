@@ -4,6 +4,7 @@ import { css } from "glamor";
 import { Layout, Row, Col } from "antd";
 
 import Toolbar from "./Toolbar";
+import Sidebar from "./Sidebar";
 import History from "./History";
 
 const styles = {
@@ -46,9 +47,13 @@ export default class App extends React.Component {
                     </Row>
                 </Layout.Header>
 
-                <Layout.Content className={`${styles.content}`}>
-                    <History />
-                </Layout.Content>
+                <Layout>
+                    <Sidebar />
+
+                    <Layout.Content className={`${styles.content}`}>
+                        <History />
+                    </Layout.Content>
+                </Layout>
             </Layout>
         );
     }
