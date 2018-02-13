@@ -18,6 +18,12 @@ const styles = {
     titleDomain: css({
         position: "relative",
     }),
+    table: css({
+        " .ant-table": {
+            background: "#FFF",
+            tableLayout: "fixed",
+        },
+    }),
 };
 
 const columns = [
@@ -75,6 +81,7 @@ class History extends React.Component {
 
         return (
             <Table
+                className={`${styles.table}`}
                 columns={columns}
                 dataSource={this.props.history}
                 expandedRowRender={this.renderVisits}

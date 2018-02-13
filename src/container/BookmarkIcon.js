@@ -8,7 +8,7 @@ import { isBookmarked } from "../reducer";
 
 const styles = {
     star: css({
-        color: "#FDD835",
+        color: "#5C6BC0",
     }),
 };
 

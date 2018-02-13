@@ -7,14 +7,14 @@ import Toolbar from "./Toolbar";
 import History from "./History";
 
 const styles = {
-    wrapper: css({
-        padding: "50px",
+    header: css({
+        background: "#3F51B5"
+    }),
+    sourceLink: css({
+        color: "#FFF",
     }),
     content: css({
-        " .ant-table": css({
-            background: "#FFF",
-            tableLayout: "fixed",
-        }),
+        padding: "50px",
     }),
 };
 
@@ -26,10 +26,15 @@ export default class App extends React.Component {
     render() {
         return (
             <Layout>
-                <Layout.Header>
+                <Layout.Header className={`${styles.header}`}>
                     <Row gutter={8}>
                         <Col span={4}>
-                            <a href="#">
+                            <a
+                                className={`${styles.sourceLink}`}
+                                href="https://github.com/MrSaints/historyx"
+                                rel="noopener noreferrer"
+                                target="_blank"
+                                title="HistoryX Source">
                                 History<sup>&chi;3</sup>
                             </a>
                         </Col>
@@ -40,10 +45,8 @@ export default class App extends React.Component {
                     </Row>
                 </Layout.Header>
 
-                <Layout.Content className={`${styles.wrapper}`}>
-                    <div className={`${styles.content}`}>
-                        <History />
-                    </div>
+                <Layout.Content className={`${styles.content}`}>
+                    <History />
                 </Layout.Content>
             </Layout>
         );
