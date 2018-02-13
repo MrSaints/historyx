@@ -1,10 +1,23 @@
 import React from "react";
 import { connect } from "react-redux";
+import { css } from "glamor";
 
 import { Layout, Menu, Icon } from "antd";
 
 import { loadHistory } from "../action";
 import { CreateTab } from "../API";
+
+// eslint-disable-next-line no-undef
+const version = process.env.VERSION;
+
+const styles = {
+    version: css({
+        color: "#f0f2f5",
+        fontSize: ".8rem",
+        padding: "1rem",
+        textAlign: "center",
+    }),
+};
 
 class Sidebar extends React.Component {
     handleReload = () => {
@@ -34,6 +47,8 @@ class Sidebar extends React.Component {
                         </span>
                     </Menu.Item>
                 </Menu>
+
+                {version && <div {...styles.version}>Version {version}</div>}
             </Layout.Sider>
         );
     }

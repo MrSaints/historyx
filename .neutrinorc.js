@@ -13,6 +13,7 @@ module.exports = {
                 html: {
                     title: "History",
                 },
+                env: ["NODE_ENV", "VERSION"],
             },
         ],
         neutrino => {
