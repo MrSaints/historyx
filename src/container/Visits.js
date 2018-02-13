@@ -2,18 +2,61 @@ import React from "react";
 import * as R from "ramda";
 import { connect } from "react-redux";
 
-import { Table } from "antd";
+import { Table, Icon, Tooltip } from "antd";
 
 import { getVisitsByURL } from "../reducer";
 import { loadVisits } from "../action";
 
 import DateFormat from "../component/DateFormat";
 
+const transitionToIconType = {
+    link: "link",
+    typed: "message",
+    auto_bookmark: "flag",
+    auto_subframe: "layout",
+    manual_subframe: "layout",
+    generated: "ellipsis",
+    auto_toplevel: "poweroff",
+    form_submit: "form",
+    reload: "reload",
+    keyword: "search",
+    keyword_generated: "search",
+};
+
+const transitionToDescription = {
+    link: "Link on a page",
+    typed: "Typed via address bar",
+    auto_bookmark: "Item from bookmarks or browsing history",
+    auto_subframe: "iframe",
+    manual_subframe: "iframe via a manual action",
+    generated: "Address bar suggestion",
+    auto_toplevel: "Command line or default start page",
+    form_submit: "Form submission",
+    reload: "Page reload",
+    keyword: "Search suggestion",
+    keyword_generated: "Search suggestion",
+};
+
 class Visits extends React.Component {
     constructor(props) {
         super(props);
 
-        this.columns = [
+        this.columns = [,
+            {
+                title: "Transition",
+                dataIndex: "transition",
+                key: "transition",
+                width: 30,
+                render: transition => {
+                    const iconType = R.prop(transition, transitionToIconType);
+                    const description = R.prop(transition, transitionToDescription);
+                    return iconType && description && (
+                        <Tooltip title={description}>
+                            <Icon type={iconType} />
+                        </Tooltip>
+                    );
+                },
+            },
             {
                 title: "Visit Time",
                 dataIndex: "visitTime",
@@ -26,7 +69,7 @@ class Visits extends React.Component {
                         {visitTime}
                     </DateFormat>
                 ),
-            },
+            }
         ];
     }
 
