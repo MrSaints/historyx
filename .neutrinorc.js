@@ -11,7 +11,7 @@ module.exports = {
                     },
                 },
                 html: {
-                    title: "HistoryX (3)",
+                    title: "History",
                 },
             },
         ],
