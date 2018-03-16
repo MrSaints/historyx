@@ -5,6 +5,7 @@
         "start": "neutrino start",
         "build": "neutrino build",
         "build/dev": "neutrino build --options.env.NODE_ENV development",
+        "lint": "eslint '{*.js,src/**/*.js}'",
         "fmt": "yarn fmt:js && yarn fmt:json",
         "fmt:js":
             "prettier --write '{*.js,src/**/*.js}' && eslint --fix '{*.js,src/**/*.js}'",
@@ -12,24 +13,24 @@
         "package": "zip -FSr extension.zip manifest.json LICENSE build"
     },
     "dependencies": {
-        "antd": "^3.2.0",
+        "antd": "^3.3.0",
         "date-fns": "^1.29.0",
         "glamor": "^2.20.40",
-        "prop-types": "^15.6.0",
+        "prop-types": "^15.6.1",
         "ramda": "^0.25.0",
         "react": "^16.2.0",
         "react-dom": "^16.2.0",
-        "react-redux": "^5.0.6",
+        "react-redux": "^5.0.7",
         "redux": "^3.7.2",
         "redux-logger": "^3.0.6",
         "redux-thunk": "^2.2.0"
     },
     "devDependencies": {
-        "@neutrinojs/react": "^8.1.1",
-        "babel-eslint": "^8.2.1",
-        "eslint": "^4.17.0",
-        "eslint-plugin-react": "^7.6.1",
-        "neutrino": "^8.1.1",
-        "prettier": "^1.10.2"
+        "@neutrinojs/react": "^8.1.2",
+        "babel-eslint": "^8.2.2",
+        "eslint": "^4.18.2",
+        "eslint-plugin-react": "^7.7.0",
+        "neutrino": "^8.1.2",
+        "prettier": "^1.11.1"
     }
 }
