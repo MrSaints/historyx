@@ -11,6 +11,18 @@ const defaultState = {
     byURL: {},
 };
 
+const flattenBookmarks = R.reduce((acc, node) => {
+    const children = R.prop("children", node);
+    const isFolder = R.isNil(R.prop("url", node));
+    node = isFolder ? [] : [node];
+    if (R.isNil(children)) {
+        return [...acc, ...node];
+    }
+    return [...acc, ...node, ...flattenBookmarks(children)];
+}, []);
+const indexByURL = R.indexBy(R.prop("url"));
+const getAllBookmarksByURL = R.pipe(flattenBookmarks, indexByURL);
+
 const bookmarks = (state = defaultState, action) => {
     switch (action.type) {
     case BOOKMARKS_REQUEST:
@@ -19,18 +31,6 @@ const bookmarks = (state = defaultState, action) => {
             isLoading: true,
         };
     case BOOKMARKS_SUCCESS: {
-        const flattenBookmarks = R.reduce((acc, node) => {
-            const children = R.prop("children", node);
-            const isFolder = R.isNil(R.prop("url", node));
-            node = isFolder ? [] : [node];
-            if (R.isNil(children)) {
-                return [...acc, ...node];
-            }
-            return [...acc, ...node, ...flattenBookmarks(children)];
-        }, []);
-        const indexByURL = R.indexBy(R.prop("url"));
-        const getAllBookmarksByURL = R.pipe(flattenBookmarks, indexByURL);
-
         return {
             ...state,
             byURL: {

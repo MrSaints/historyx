@@ -1,8 +1,12 @@
 import React from "react";
+import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import { css } from "glamor";
 
-import { Table } from "antd";
+import isToday from "date-fns/is_today";
+import parse from "date-fns/parse";
+
+import { Dropdown, Button, Menu, Table } from "antd";
 
 import { getVisibleHistory } from "../reducer";
 import { loadBookmarks, setSelections, loadHistory } from "../action";
@@ -10,8 +14,9 @@ import { loadBookmarks, setSelections, loadHistory } from "../action";
 import BookmarkIcon from "./BookmarkIcon";
 import Visits from "./Visits";
 
-import Favicon from "../component/Favicon";
 import DateFormat from "../component/DateFormat";
+import Favicon from "../component/Favicon";
+import Hostname from "../component/Hostname";
 import TitleAndDomain from "../component/TitleAndDomain";
 
 const styles = {
@@ -24,57 +29,104 @@ const styles = {
             tableLayout: "fixed",
         },
     }),
+    verboseLastVisitTime: css({
+        fontSize: ".75em",
+        whiteSpace: "nowrap",
+    }),
 };
-
-const columns = [
-    {
-        title: "Last Visit Time",
-        dataIndex: "lastVisitTime",
-        key: "lastVisitTime",
-        width: 90,
-        render: lastVisitTime => (
-            <DateFormat format="HH:mm">{lastVisitTime}</DateFormat>
-        ),
-    },
-    {
-        title: "Favicon",
-        dataIndex: "url",
-        key: "favicon",
-        width: 30,
-        render: url => <Favicon>{url}</Favicon>,
-    },
-    {
-        title: "Bookmarked",
-        dataIndex: "url",
-        key: "isBookmarked",
-        width: 30,
-        render: url => <BookmarkIcon url={url} />,
-    },
-    {
-        title: "Title / Domain",
-        key: "titleDomain",
-        className: `${styles.titleDomain}`,
-        render: (_, record) => (
-            <TitleAndDomain
-                title={record.title}
-                domain={record.url}
-                visitCount={record.visitCount}
-            />
-        ),
-    },
-];
 
 class History extends React.Component {
     componentDidMount() {
-        this.props.loadHistory();
+        this.props.loadHistory("", 0, null, 0, false);
         this.props.loadBookmarks();
     }
 
-    renderVisits = record => <Visits url={record.url} />;
+    static renderVisits = record => <Visits url={record.url} />;
 
     handleRowSelection = selectedRowKeys => {
         this.props.setSelections(selectedRowKeys);
     };
+
+    handleMore = url => {
+        return e => {
+            e.preventDefault();
+            this.props.loadHistory(Hostname({ url }), 0, null, 0);
+        };
+    };
+
+    columns = [
+        {
+            title: "Last Visit Time",
+            dataIndex: "lastVisitTime",
+            key: "lastVisitTime",
+            width: 90,
+            render: lastVisitTime => {
+                if (!isToday(parse(lastVisitTime))) {
+                    return (
+                        <DateFormat
+                            {...styles.verboseLastVisitTime}
+                            format="HH:mm DD-MM-YYYY"
+                        >
+                            {lastVisitTime}
+                        </DateFormat>
+                    );
+                }
+
+                return <DateFormat format="HH:mm">{lastVisitTime}</DateFormat>;
+            },
+        },
+        {
+            title: "Favicon",
+            dataIndex: "url",
+            key: "favicon",
+            width: 30,
+            render: url => <Favicon>{url}</Favicon>,
+        },
+        {
+            title: "Bookmarked",
+            dataIndex: "url",
+            key: "isBookmarked",
+            width: 30,
+            render: url => <BookmarkIcon url={url} />,
+        },
+        {
+            title: "Title / Domain",
+            key: "titleDomain",
+            className: `${styles.titleDomain}`,
+            render: (_, record) => (
+                <TitleAndDomain
+                    title={record.title}
+                    domain={record.url}
+                    visitCount={record.visitCount}
+                />
+            ),
+        },
+        {
+            title: "Utilities",
+            key: "utilities",
+            width: 30,
+            render: (_, record) => (
+                <Dropdown
+                    overlay={
+                        <Menu>
+                            <Menu.Item>
+                                <a onClick={this.handleMore(record.url)}>
+                                    More from this site
+                                </a>
+                            </Menu.Item>
+                        </Menu>
+                    }
+                >
+                    <Button
+                        icon="ellipsis"
+                        shape="circle"
+                        size="small"
+                        type="ghost"
+                    />
+                </Dropdown>
+            ),
+        },
+    ];
 
     render() {
         const getRowKey = record => record.id;
@@ -87,9 +139,9 @@ class History extends React.Component {
         return (
             <Table
                 className={`${styles.table}`}
-                columns={columns}
+                columns={this.columns}
                 dataSource={this.props.history}
-                expandedRowRender={this.renderVisits}
+                expandedRowRender={History.renderVisits}
                 footer={() => {}}
                 loading={this.props.isLoading}
                 rowKey={getRowKey}
@@ -98,6 +150,7 @@ class History extends React.Component {
                 size="small"
                 pagination={{
                     pageSize: 50,
+                    position: "both",
                     showTotal: (total, range) =>
                         `${range[0]}-${range[1]} of ${total}`,
                 }}
@@ -105,6 +158,28 @@ class History extends React.Component {
         );
     }
 }
+
+History.propTypes = {
+    history: PropTypes.arrayOf(
+        PropTypes.shape({
+            lastVisitTime: PropTypes.number,
+            title: PropTypes.string,
+            url: PropTypes.string,
+            visitCount: PropTypes.number,
+        })
+    ),
+    selectedIDs: PropTypes.arrayOf(PropTypes.number),
+    isLoading: PropTypes.bool,
+    loadBookmarks: PropTypes.func.isRequired,
+    setSelections: PropTypes.func.isRequired,
+    loadHistory: PropTypes.func.isRequired,
+};
+
+History.defaultProps = {
+    history: [],
+    selectedIDs: [],
+    isLoading: true,
+};
 
 const mapStateToProps = state => {
     return {

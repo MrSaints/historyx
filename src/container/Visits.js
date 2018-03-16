@@ -1,4 +1,5 @@
 import React from "react";
+import PropTypes from "prop-types";
 import * as R from "ramda";
 import { connect } from "react-redux";
 
@@ -98,6 +99,23 @@ class Visits extends React.Component {
         );
     }
 }
+
+Visits.propTypes = {
+    url: PropTypes.string.isRequired,
+    visits: PropTypes.arrayOf(
+        PropTypes.shape({
+            transition: PropTypes.string.isRequired,
+            visitTime: PropTypes.number.isRequired,
+        })
+    ),
+    isLoading: PropTypes.bool,
+    loadVisits: PropTypes.func.isRequired,
+};
+
+Visits.defaultProps = {
+    visits: [],
+    isLoading: true,
+};
 
 const mapStateToProps = (state, ownProps) => {
     return {

@@ -1,4 +1,5 @@
 import React from "react";
+import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import { css } from "glamor";
 
@@ -12,19 +13,21 @@ const styles = {
     }),
 };
 
-class BookmarkIcon extends React.Component {
-    constructor(props) {
-        super(props);
+const BookmarkIcon = ({ isBookmarked }) => {
+    if (isBookmarked) {
+        return <Icon className={`${styles.star}`} type="star" />;
     }
 
-    render() {
-        if (this.props.isBookmarked) {
-            return <Icon className={`${styles.star}`} type="star" />;
-        }
+    return null;
+};
 
-        return null;
-    }
-}
+BookmarkIcon.propTypes = {
+    isBookmarked: PropTypes.bool,
+};
+
+BookmarkIcon.defaultProps = {
+    isBookmarked: false,
+};
 
 const mapStateToProps = (state, ownProps) => {
     return {

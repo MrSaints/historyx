@@ -19,42 +19,36 @@ const styles = {
     }),
 };
 
-export default class App extends React.Component {
-    constructor(props) {
-        super(props);
-    }
+const App = () => (
+    <Layout>
+        <Layout.Header className={`${styles.header}`}>
+            <Row gutter={8}>
+                <Col span={4}>
+                    <a
+                        className={`${styles.sourceLink}`}
+                        href="https://github.com/MrSaints/historyx"
+                        rel="noopener noreferrer"
+                        target="_blank"
+                        title="HistoryX Source"
+                    >
+                        History<sup>&chi;3</sup>
+                    </a>
+                </Col>
 
-    render() {
-        return (
-            <Layout>
-                <Layout.Header className={`${styles.header}`}>
-                    <Row gutter={8}>
-                        <Col span={4}>
-                            <a
-                                className={`${styles.sourceLink}`}
-                                href="https://github.com/MrSaints/historyx"
-                                rel="noopener noreferrer"
-                                target="_blank"
-                                title="HistoryX Source"
-                            >
-                                History<sup>&chi;3</sup>
-                            </a>
-                        </Col>
+                <Col span={16}>
+                    <Toolbar />
+                </Col>
+            </Row>
+        </Layout.Header>
 
-                        <Col span={16}>
-                            <Toolbar />
-                        </Col>
-                    </Row>
-                </Layout.Header>
+        <Layout>
+            <Sidebar />
 
-                <Layout>
-                    <Sidebar />
+            <Layout.Content className={`${styles.content}`}>
+                <History />
+            </Layout.Content>
+        </Layout>
+    </Layout>
+);
 
-                    <Layout.Content className={`${styles.content}`}>
-                        <History />
-                    </Layout.Content>
-                </Layout>
-            </Layout>
-        );
-    }
-}
+export default App;

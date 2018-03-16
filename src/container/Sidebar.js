@@ -1,4 +1,5 @@
 import React from "react";
+import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import { css } from "glamor";
 
@@ -35,8 +36,8 @@ class Sidebar extends React.Component {
                 collapsedWidth={0}
                 defaultCollapsed={true}
             >
-                <Menu theme="dark" mode="inline">
-                    <Menu.Item>
+                <Menu mode="inline" selectedKeys={[]} theme="dark">
+                    <Menu.Item disabled={this.props.isLoading}>
                         <span onClick={this.handleReload}>
                             <Icon type="reload" /> Reload
                         </span>
@@ -54,6 +55,21 @@ class Sidebar extends React.Component {
     }
 }
 
-export default connect(null, {
+Sidebar.propTypes = {
+    isLoading: PropTypes.bool,
+    loadHistory: PropTypes.func.isRequired,
+};
+
+Sidebar.defaultProps = {
+    isLoading: true,
+};
+
+const mapStateToProps = state => {
+    return {
+        isLoading: state.history.isLoading,
+    };
+};
+
+export default connect(mapStateToProps, {
     loadHistory,
 })(Sidebar);

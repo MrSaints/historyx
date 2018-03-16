@@ -13,7 +13,7 @@ const defaultState = {
     visibleIDs: [],
     selectedIDs: [],
     query: {
-        query: "",
+        text: "",
         startTime: 0,
         endTime: null,
         maxResults: 0,

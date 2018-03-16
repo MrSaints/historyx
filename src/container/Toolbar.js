@@ -1,4 +1,5 @@
 import React from "react";
+import PropTypes from "prop-types";
 import * as R from "ramda";
 import { connect } from "react-redux";
 import { css } from "glamor";
@@ -29,6 +30,14 @@ class Toolbar extends React.Component {
             dateRange: [],
         };
         this.state = this.defaultState;
+    }
+
+    componentWillReceiveProps({ search }) {
+        if (!R.equals(search, this.state.search)) {
+            this.setState({
+                search,
+            });
+        }
     }
 
     handleSearchChange = e => {
@@ -126,8 +135,22 @@ class Toolbar extends React.Component {
     }
 }
 
+Toolbar.propTypes = {
+    search: PropTypes.string,
+    totalSelections: PropTypes.number,
+    loadHistory: PropTypes.func.isRequired,
+    setSelections: PropTypes.func.isRequired,
+    deleteSelections: PropTypes.func.isRequired,
+};
+
+Toolbar.defaultProps = {
+    search: "",
+    totalSelections: 0,
+};
+
 const mapStateToProps = state => {
     return {
+        search: state.history.query.text,
         totalSelections: totalSelections(state),
     };
 };

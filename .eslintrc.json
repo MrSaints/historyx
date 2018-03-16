@@ -1,5 +1,5 @@
 {
-    "extends": "eslint:recommended",
+    "extends": ["eslint:recommended", "plugin:react/recommended"],
     "plugins": ["react"],
     "parser": "babel-eslint",
     "parserOptions": {
@@ -21,8 +21,14 @@
         "no-var": "error",
         "prefer-const": "error",
         "quotes": ["error", "double"],
-        "react/jsx-uses-react": "error",
-        "react/jsx-uses-vars": "error",
-        "semi": ["error", "always"]
+        "semi": ["error", "always"],
+        "react/boolean-prop-naming": "error",
+        "react/no-array-index-key": "warn",
+        "react/no-typos": "warn",
+        "react/no-unused-prop-types": "error",
+        "react/no-unused-state": "error",
+        "react/no-will-update-set-state": "error",
+        "react/prefer-es6-class": "error",
+        "react/prefer-stateless-function": "warn"
     }
 }
