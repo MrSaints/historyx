@@ -1,8 +1,10 @@
 import React from "react";
 import PropTypes from "prop-types";
+import * as R from "ramda";
 import { connect } from "react-redux";
 import { css } from "glamor";
 
+import isSameDay from "date-fns/is_same_day";
 import isToday from "date-fns/is_today";
 import parse from "date-fns/parse";
 
@@ -42,6 +44,59 @@ class History extends React.Component {
     }
 
     static renderVisits = record => <Visits url={record.url} />;
+
+    renderTitle = currentPageData => {
+        if (!R.length(currentPageData)) {
+            return null;
+        }
+
+        const isEmptyNil = R.either(R.isEmpty, R.isNil);
+
+        const { text, startTime, endTime } = this.props.query;
+        const search = text;
+        const hasDateRange = !isEmptyNil(startTime) && !isEmptyNil(endTime);
+
+        const lastLastVisitTime = R.prop("lastVisitTime")(
+            R.last(currentPageData)
+        );
+        const firstLastVisitTime = R.prop("lastVisitTime")(
+            R.head(currentPageData)
+        );
+        const isLastVisitsSame = isSameDay(
+            parse(lastLastVisitTime),
+            parse(firstLastVisitTime)
+        );
+
+        const withDateFormat = dt => (
+            <DateFormat format="Do MMMM">{dt}</DateFormat>
+        );
+
+        return (
+            <React.Fragment>
+                {search && (
+                    <React.Fragment>
+                        <strong>Searching:</strong> <em>{search}</em>
+                    </React.Fragment>
+                )}
+                {search && hasDateRange && " between "}
+                {hasDateRange && (
+                    <React.Fragment>
+                        <DateFormat>{startTime}</DateFormat>
+                        {" to "}
+                        <DateFormat>{endTime}</DateFormat>
+                    </React.Fragment>
+                )}
+                {(search || hasDateRange) && " | "}
+                {withDateFormat(lastLastVisitTime)}
+                {!isLastVisitsSame && (
+                    <React.Fragment>
+                        {" "}
+                        to {withDateFormat(firstLastVisitTime)}
+                    </React.Fragment>
+                )}
+            </React.Fragment>
+        );
+    };
 
     handleRowSelection = selectedRowKeys => {
         this.props.setSelections(selectedRowKeys);
@@ -142,12 +197,13 @@ class History extends React.Component {
                 columns={this.columns}
                 dataSource={this.props.history}
                 expandedRowRender={History.renderVisits}
-                footer={() => {}}
+                footer={this.renderTitle}
                 loading={this.props.isLoading}
                 rowKey={getRowKey}
                 rowSelection={rowSelection}
                 showHeader={false}
                 size="small"
+                title={this.renderTitle}
                 pagination={{
                     pageSize: 50,
                     position: "both",
@@ -168,8 +224,9 @@ History.propTypes = {
             visitCount: PropTypes.number,
         })
     ),
-    selectedIDs: PropTypes.arrayOf(PropTypes.number),
     isLoading: PropTypes.bool,
+    query: PropTypes.object,
+    selectedIDs: PropTypes.arrayOf(PropTypes.number),
     loadBookmarks: PropTypes.func.isRequired,
     setSelections: PropTypes.func.isRequired,
     loadHistory: PropTypes.func.isRequired,
@@ -177,15 +234,17 @@ History.propTypes = {
 
 History.defaultProps = {
     history: [],
-    selectedIDs: [],
     isLoading: true,
+    query: {},
+    selectedIDs: [],
 };
 
 const mapStateToProps = state => {
     return {
         history: getVisibleHistory(state),
-        selectedIDs: state.history.selectedIDs,
         isLoading: state.history.isLoading,
+        query: state.history.query,
+        selectedIDs: state.history.selectedIDs,
     };
 };
 
