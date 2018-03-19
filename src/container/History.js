@@ -38,6 +38,8 @@ const styles = {
 };
 
 class History extends React.Component {
+    lastSelectedIndex = null;
+
     componentDidMount() {
         this.props.loadHistory("", 0, null, 0, false);
         this.props.loadBookmarks();
@@ -98,8 +100,40 @@ class History extends React.Component {
         );
     };
 
-    handleRowSelection = selectedRowKeys => {
-        this.props.setSelections(selectedRowKeys);
+    handleRowSelection = (record, selected, selectedRows, nativeEvent) => {
+        const selectedIndex = R.findIndex(
+            R.propEq("id", record.id),
+            this.props.history
+        );
+        let selectedIDs = R.pluck("id")(selectedRows);
+
+        if (!R.isNil(this.lastSelectedIndex) && nativeEvent.shiftKey) {
+            // Create a list of affected rows by using the last selected index,
+            // and the currently selected index to see if we need to affect items
+            // "before" the last selected index or "after" the last selected index.
+            const affectedRows = this.props.history.filter((item, i) => {
+                return this.lastSelectedIndex < selectedIndex
+                    ? i <= selectedIndex && i >= this.lastSelectedIndex
+                    : i >= selectedIndex && i <= this.lastSelectedIndex;
+            });
+            const affectedIDs = R.pluck("id")(affectedRows);
+
+            if (selected) {
+                // Select by creating a new array of selected IDs,
+                // and affected IDs.
+                selectedIDs = R.concat(selectedIDs, affectedIDs);
+            } else {
+                // De-select by creating a new array of IDs that are not in
+                // the list of affected IDs or the last selected.
+                selectedIDs = selectedIDs.filter(id => {
+                    return affectedIDs.indexOf(id) === -1;
+                });
+            }
+        }
+
+        this.lastSelectedIndex = selectedIndex;
+
+        this.props.setSelections(R.uniq(selectedIDs));
     };
 
     handleMore = url => {
@@ -187,7 +221,7 @@ class History extends React.Component {
         const getRowKey = record => record.id;
 
         const rowSelection = {
-            onChange: this.handleRowSelection,
+            onSelect: this.handleRowSelection,
             selectedRowKeys: this.props.selectedIDs,
         };
 
@@ -218,15 +252,17 @@ class History extends React.Component {
 History.propTypes = {
     history: PropTypes.arrayOf(
         PropTypes.shape({
+            id: PropTypes.string,
             lastVisitTime: PropTypes.number,
             title: PropTypes.string,
+            typedCount: PropTypes.number,
             url: PropTypes.string,
             visitCount: PropTypes.number,
         })
     ),
     isLoading: PropTypes.bool,
     query: PropTypes.object,
-    selectedIDs: PropTypes.arrayOf(PropTypes.number),
+    selectedIDs: PropTypes.arrayOf(PropTypes.string),
     loadBookmarks: PropTypes.func.isRequired,
     setSelections: PropTypes.func.isRequired,
     loadHistory: PropTypes.func.isRequired,
